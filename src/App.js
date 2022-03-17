@@ -1,23 +1,24 @@
-import logo from './logo.svg';
 import './App.css';
+import { Helmet } from 'react-helmet';
+import Settings from './components/Settings';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='w-full min-h-screen p-8'>
+      <Helmet>
+        <title>Cache Coherency Simulator</title>
+      </Helmet>
+
+      <h1 className='text-3xl font-bold mb-10'>Cache Coherency Simulator</h1>
+
+      <div className='flex flex-row'>
+        <div className='flex flex-col w-2/5'>
+          <Settings/>
+        </div>
+        <div className='w-3/5'>
+          Right col
+        </div>
+      </div>
     </div>
   );
 }
