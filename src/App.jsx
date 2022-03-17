@@ -1,6 +1,8 @@
 import './App.css';
 import { Helmet } from 'react-helmet';
 import Settings from './components/Settings';
+import Instructions from './components/Instructions';
+import Processor from './components/Processor';
 
 function App() {
   return (
@@ -12,11 +14,14 @@ function App() {
       <h1 className='text-3xl font-bold mb-10'>Cache Coherency Simulator</h1>
 
       <div className='flex flex-row'>
-        <div className='flex flex-col w-2/5'>
+        <div className='flex flex-col pr-4 w-1/2 xl:w-2/5 gap-y-8'>
           <Settings/>
+          <Instructions/>
         </div>
-        <div className='w-3/5'>
-          Right col
+        <div className='pl-4 w-1/2 xl:w-3/5'>
+          <Processor
+            id={1}
+          />
         </div>
       </div>
     </div>
