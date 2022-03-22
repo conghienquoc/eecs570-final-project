@@ -3,14 +3,25 @@ import React, { useState } from "react";
 const styles = {
 };
 
-const Processor = ({id}) => {
+const Processor = ({id, cache}) => {
+    const body = cache.map(row => {
+        return (
+            <tr>
+                <td>{ row['state'] }</td>
+                <td>{ row['register'] }</td>
+                <td>{ row['value'] }</td>
+            </tr>
+        );
+    })
+
+
     return (
-        <div className="flex flex-row gap-x-2">
-            <div className="w-fit h-fit rounded-lg px-3 py-1 border border-medium-grey">
+        <div id={'P' + id} className="flex flex-row gap-x-2">
+            <div className="w-fit h-fit rounded-lg px-3 py-1 border border-offblack">
                 P{id}
             </div>
-            <table className="table-fixed border-collapse border border-medium-grey text-center rounded-[15px]">
-                <thead>
+            <table className="rounded-table">
+                <thead className="bg-light-grey">
                     <tr>
                         <th>State</th>
                         <th>Register</th>
@@ -18,11 +29,7 @@ const Processor = ({id}) => {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>I</td>
-                        <td>A</td>
-                        <td></td>
-                    </tr>
+                    {body}
                 </tbody>
             </table>
         </div>

@@ -2,11 +2,11 @@ import './App.css';
 import { Helmet } from 'react-helmet';
 import Settings from './components/Settings';
 import Instructions from './components/Instructions';
-import Processor from './components/Processor';
+import Simulation from './components/Simulation';
 
 function App() {
   return (
-    <div className='w-full min-h-screen p-8'>
+    <div className='w-full min-h-screen px-16 py-10'>
       <Helmet>
         <title>Cache Coherency Simulator</title>
       </Helmet>
@@ -19,9 +19,7 @@ function App() {
           <Instructions/>
         </div>
         <div className='pl-4 w-1/2 xl:w-3/5'>
-          <Processor
-            id={1}
-          />
+          <Simulation/>
         </div>
       </div>
     </div>

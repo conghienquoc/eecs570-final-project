@@ -13,6 +13,52 @@ code {
     monospace;
 }
 
+.rounded-table {
+  border-spacing: 0;
+  border-collapse: separate;
+  text-align: center;
+}
+
+.rounded-table th{
+  border-top: 1px solid theme('colors.offblack');
+  padding: 0.25rem .75rem;
+}
+
+.rounded-table td {
+  padding: 0.25rem .75rem;
+}
+
+/* the first 'th' within the first 'tr' of the 'thead': */
+.rounded-table thead tr:first-child th:first-child {
+  border-radius: 0.6em 0 0 0;
+  border-left: 1px solid theme('colors.offblack');
+}
+/* the last 'th' within the first 'tr' of the 'thead': */
+.rounded-table thead tr:first-child th:last-child {
+  border-radius: 0 0.6em 0 0;
+  border-right: 1px solid theme('colors.offblack');
+}
+/* the first 'td' within the last 'tr' of the 'tbody': */
+.rounded-table tbody tr:last-child td:first-child {
+  border-radius: 0 0 0 0.6em;
+}
+/* the last 'td' within the last 'tr' of the 'tbody': */
+.rounded-table tbody tr:last-child td:last-child {
+  border-radius: 0 0 0.6em 0;
+}
+
+.rounded-table tbody tr:last-child td {
+  border-bottom: 1px solid theme('colors.offblack');
+}
+
+.rounded-table tbody tr td:first-child {
+  border-left: 1px solid theme('colors.offblack');
+}
+
+.rounded-table tbody tr td:last-child {
+  border-right: 1px solid theme('colors.offblack');
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
