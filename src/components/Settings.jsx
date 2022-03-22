@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Switch from "./Switch";
+import API from '../services/api';
 
 
 const schemes = {
@@ -18,11 +19,19 @@ const transients = {
     yes: 'Transient'    
 }
 
-
 const Settings = () => {
     const [scheme, setScheme] = useState(schemes.snooping);
     const [protocol, setProtocol] = useState(protocols.msi);
     const [transient, setTransient] = useState(transients.no);
+
+    const getInitialState = () => {
+        var params = {
+            scheme: scheme == schemes.snooping ? 'snooping' : 'directory',
+            protocol: protocol.toLowerCase(),
+            transient: transient == transients.yes,
+        };
+        API.getInitialState(params);
+    };
 
     return (
         <div className="flex flex-col gap-y-2">
@@ -41,6 +50,11 @@ const Settings = () => {
                 active={transient}
                 toggleFunc={setTransient}
             />
+            <button className="rounded-lg bg-blue text-white"
+                onClick={() => getInitialState()}
+            >
+                Get initial state
+            </button>
         </div>
     )
 }
