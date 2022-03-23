@@ -3,8 +3,18 @@ import { Helmet } from 'react-helmet';
 import Settings from './components/Settings';
 import Instructions from './components/Instructions';
 import Simulation from './components/Simulation';
+import API from './services/api';
 
 function App() {
+  const test = () => {
+    // var params = {
+    //   'processor': 1,
+    //   'action': 'GET_S'
+    // }
+    var data = API.test();
+    console.log(data);
+  };
+
   return (
     <div className='w-full min-h-screen px-16 py-10'>
       <Helmet>
@@ -22,6 +32,11 @@ function App() {
           <Simulation/>
         </div>
       </div>
+
+      <button className='bg-blue'
+        onClick={() => test()}>
+        Click me
+      </button>
     </div>
   );
 }

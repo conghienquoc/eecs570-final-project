@@ -1,9 +1,12 @@
 import flask
 from flask import make_response, jsonify
+from flask_cors import CORS
+
 
 app = flask.Flask(__name__)
+CORS(app)
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/test', methods=['GET', 'POST'])
 def show_index():
     if flask.request.method == "POST":
         request = flask.request.get_json(force=True)
