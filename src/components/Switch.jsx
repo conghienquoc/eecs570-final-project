@@ -16,11 +16,11 @@ const styles = {
 
 
 const Switch = ({options, active, toggleFunc}) => {
-    const switches = options.map((option) => {
+    const switches = options.map((option, i) => {
         const isActive = active === option;
 
         return (
-            <button className={styles.switch + (isActive ? styles.active_switch : '')}
+            <button key={i} className={styles.switch + (isActive ? styles.active_switch : '')}
             onClick={() => toggleFunc(option)}>
                 {option}
             </button>

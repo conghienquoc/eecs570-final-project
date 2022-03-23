@@ -26,9 +26,9 @@ const Settings = () => {
 
     const getInitialState = () => {
         var params = {
-            scheme: scheme == schemes.snooping ? 'snooping' : 'directory',
+            scheme: scheme === schemes.snooping ? 'snooping' : 'directory',
             protocol: protocol.toLowerCase(),
-            transient: transient == transients.yes,
+            transient: transient === transients.yes,
         };
         API.getInitialState(params);
     };

@@ -13,19 +13,20 @@ const showEffect = {
     draw: "draw"
 };
 
+const actions = {
+    busRd: "BusRead",
+    busReply: "BusReply",
+    update: "Update",
+}
 
-const Simulation = () => {
+
+const Simulation = ({currentSteps}) => {
     const cache = [
         {
           state: 'I',
           register: 'A',
           value: '',
         },
-        {
-          state: 'M',
-          register: 'B',
-          value: '2',
-        }
     ]
 
     const startRef = useRef();
@@ -49,9 +50,23 @@ const Simulation = () => {
             }
         );
 
-        console.log(line1);
-
     }, []);
+
+    const step_button = (i) => {
+        <button className="absolute right-[-2.5rem] top-0 rounded-full border bg-red w-[30px] h-[30px] text-white"
+        onClick={() => showLine(line1)}>
+            {i}
+        </button>
+    }
+    
+    // Add tooltip 
+    useEffect(() => {
+        if (currentSteps.length === 0) return;
+        
+        currentSteps.map((step, i) => {
+            if (step.action === actions.update) return;
+        });
+    }, [currentSteps])
 
 
     return (
@@ -59,11 +74,6 @@ const Simulation = () => {
             <div className="flex flex-col gap-y-16">
                 <div className="relative">
                     <Processor id={1} cache={cache}/>
-                    <button className="absolute right-[-2.5rem] top-0 rounded-full border bg-red w-[30px] h-[30px] text-white"
-                        onClick={() => showLine(line1)}
-                    >
-                        1
-                    </button>
                 </div>
                 <div>
                     <Processor id={2} cache={cache}/>

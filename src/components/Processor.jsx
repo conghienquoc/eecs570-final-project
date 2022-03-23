@@ -4,9 +4,9 @@ const styles = {
 };
 
 const Processor = ({id, cache}) => {
-    const body = cache.map(row => {
+    const body = cache.map((row, i) => {
         return (
-            <tr>
+            <tr key={i}>
                 <td>{ row['state'] }</td>
                 <td>{ row['register'] }</td>
                 <td>{ row['value'] }</td>

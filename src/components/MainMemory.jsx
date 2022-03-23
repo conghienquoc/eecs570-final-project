@@ -4,10 +4,9 @@ const styles = {
 };
 
 const MainMemory = ({cache}) => {
-    const body = cache.map(row => {
+    const body = cache.map((row, i) => {
         return (
-            <tr>
-                <td>{ row['state'] }</td>
+            <tr key={i}>
                 <td>{ row['register'] }</td>
                 <td>{ row['value'] }</td>
             </tr>
@@ -23,7 +22,6 @@ const MainMemory = ({cache}) => {
             <table className="rounded-table">
                 <thead className="bg-light-grey">
                     <tr>
-                        <th>State</th>
                         <th>Register</th>
                         <th>Value</th>
                     </tr>
