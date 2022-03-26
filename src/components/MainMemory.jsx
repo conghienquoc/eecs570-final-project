@@ -4,14 +4,12 @@ const styles = {
 };
 
 const MainMemory = ({cache}) => {
-    const body = cache.map((row, i) => {
-        return (
-            <tr key={i}>
-                <td>{ row['register'] }</td>
-                <td>{ row['value'] }</td>
-            </tr>
-        );
-    })
+    const body = (
+        <tr>
+            <td>{ cache['register'] }</td>
+            <td>{ cache['value'] }</td>
+        </tr>
+    );
 
 
     return (

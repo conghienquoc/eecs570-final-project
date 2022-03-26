@@ -9,6 +9,7 @@ import API from './services/api';
 function App() {
   const [currentSteps, setCurrentSteps] = useState([])
 
+
   return (
     <div className='w-full min-h-screen px-16 py-10'>
       <Helmet>
@@ -23,14 +24,9 @@ function App() {
           <Instructions setCurrentSteps={setCurrentSteps}/>
         </div>
         <div className='pl-4 w-1/2 xl:w-3/5'>
-          <Simulation currentSteps={currentSteps}/>
+          <Simulation/>
         </div>
       </div>
-
-      <button className='bg-blue'
-        onClick={() => test()}>
-        Click me
-      </button>
     </div>
   );
 }

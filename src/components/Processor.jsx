@@ -4,16 +4,13 @@ const styles = {
 };
 
 const Processor = ({id, cache}) => {
-    const body = cache.map((row, i) => {
-        return (
-            <tr key={i}>
-                <td>{ row['state'] }</td>
-                <td>{ row['register'] }</td>
-                <td>{ row['value'] }</td>
-            </tr>
-        );
-    })
-
+    const body = (
+        <tr>
+            <td>{ cache['state'] }</td>
+            <td>{ cache['register'] }</td>
+            <td>{ cache['value'] }</td>
+        </tr>
+    );
 
     return (
         <div id={'P' + id} className="flex flex-row gap-x-2">

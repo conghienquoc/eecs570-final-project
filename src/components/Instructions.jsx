@@ -33,6 +33,26 @@ const Instructions = ({setCurrentSteps}) => {
                     </button>
                 </div>
             </div>
+            <div className="mt-4 grid grid-cols-3 gap-4">
+                <button className="rounded-lg p-2 bg-red text-white">
+                    Read Processor 1
+                </button>
+                <button className="rounded-lg p-2 bg-red text-white">
+                    Write Processor 1, val: <input className="text-offblack"></input>
+                </button>
+                <button className="rounded-lg p-2 bg-red text-white">
+                    Evict Processor 1
+                </button>
+                <button className="rounded-lg p-2 bg-red text-white">
+                    Read Processor 2
+                </button>
+                <button className="rounded-lg p-2 bg-red text-white">
+                    Write Processor 2, val: <input className="text-offblack"></input>
+                </button>
+                <button className="rounded-lg p-2 bg-red text-white">
+                    Evict Processor 2
+                </button>
+            </div>
         </div>
     )
 }

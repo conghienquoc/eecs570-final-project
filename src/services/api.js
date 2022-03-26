@@ -21,6 +21,7 @@ class API {
             url: "get_next_step",
             data: paramObj,
         })
+        console.log(response.data)
         return response.data;
     }
 

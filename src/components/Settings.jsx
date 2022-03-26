@@ -33,6 +33,10 @@ const Settings = () => {
         API.getInitialState(params);
     };
 
+    const clear = () => {
+        API.clearMachine();
+    }
+
     return (
         <div className="flex flex-col gap-y-2">
             <Switch 
@@ -50,10 +54,14 @@ const Settings = () => {
                 active={transient}
                 toggleFunc={setTransient}
             />
-            <button className="rounded-lg bg-blue text-white"
+            <button className="rounded-lg bg-blue p-2 text-white"
                 onClick={() => getInitialState()}
             >
                 Get initial state
+            </button>
+            <button className='bg-blue text-white p-2 rounded-lg'
+                onClick={() => clear()}>
+                Clear Backend
             </button>
         </div>
     )
