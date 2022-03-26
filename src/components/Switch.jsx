@@ -10,7 +10,7 @@ const styles = {
     active_switch: [
         '',
         'bg-white',
-        'text-offblack'
+        '!text-offblack'
     ].join(' '),
 };
 

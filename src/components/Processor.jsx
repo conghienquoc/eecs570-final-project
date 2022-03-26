@@ -6,9 +6,9 @@ const styles = {
 const Processor = ({id, cache}) => {
     const body = (
         <tr>
-            <td>{ cache['state'] }</td>
-            <td>{ cache['register'] }</td>
-            <td>{ cache['value'] }</td>
+            <td>{ cache['state'] !== '' ?  cache['state'] : '—'}</td>
+            <td>{ cache['register'] !== '' ?  cache['register'] : '—'}</td>
+            <td>{ cache['value'] !== '' ?  cache['value'] : '—'}</td>
         </tr>
     );
 

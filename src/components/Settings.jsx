@@ -19,7 +19,13 @@ const transients = {
     yes: 'Transient'    
 }
 
-const Settings = () => {
+const coherency_states = {
+    'Invalid': 'I',
+    'Shared': 'S',
+    'Modified': 'M',
+}
+
+const Settings = ({setProcessors}) => {
     const [scheme, setScheme] = useState(schemes.snooping);
     const [protocol, setProtocol] = useState(protocols.msi);
     const [transient, setTransient] = useState(transients.no);
@@ -30,7 +36,16 @@ const Settings = () => {
             protocol: protocol.toLowerCase(),
             transient: transient === transients.yes,
         };
-        API.getInitialState(params);
+        API.getInitialState(params).then( res => {
+            var procs_initial_state = res.slice(0,-1).map((proc) => {
+                return {
+                    state: coherency_states['Invalid'],
+                    register: proc.register,
+                    value: proc.value,
+                }
+            })
+            setProcessors(procs_initial_state);
+        });
     };
 
     const clear = () => {
