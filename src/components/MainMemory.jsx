@@ -6,8 +6,8 @@ const styles = {
 const MainMemory = ({cache}) => {
     const body = (
         <tr>
-            <td>{ cache['register'] }</td>
-            <td>{ cache['value'] }</td>
+            <td>{ cache['register'] !== '' ?  cache['register'] : '—'}</td>
+            <td>{ cache['value'] !== '' ?  cache['value'] : '—'}</td>
         </tr>
     );
 
