@@ -39,6 +39,33 @@ class API {
         return response.data;
     }
 
+    async executeProcessorAction(paramObj) {
+        console.log(paramObj);
+        const response = await http({
+            method: 'POST',
+            url: "execute_processor_action",
+            data: paramObj, // {'processor': 0-index, and 'action' (Load, Evict, Store)}
+        })
+        console.log(response.data)  
+        return response.data;
+    }
+
+    
+    async getBusEvents() {
+        const response = await http.get('/get_bus_events');
+        console.log(response.data);
+        return response.data;
+    }
+
+    async executeBusEvents(paramObj) {
+        const response = await http({
+            method: 'POST',
+            url: "execute_bus_events",
+            data: paramObj,
+        })
+        console.log(response.data)  
+        return response.data;
+    }
 
     async test() {
         const response = await http.get('/test');

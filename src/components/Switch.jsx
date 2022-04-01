@@ -6,6 +6,7 @@ const styles = {
         'px-3', 'py-1',
         'rounded-lg',
         'text-medium-grey',
+        'flex-1'
     ].join(' '),
     active_switch: [
         '',
@@ -28,14 +29,7 @@ const Switch = ({options, active, toggleFunc}) => {
     })
 
     return (
-        <div className="flex flex-row gap-x-2 rounded-xl bg-light-grey w-fit px-3 py-2">
-            {/* <button className="rounded-lg bg-white px-3 py-1">
-                {options[0]}
-            </button>
-
-            <button className="rounded-lg bg-light-grey px-3 py-1 text-medium-grey">
-                {options[1]}
-            </button> */}
+        <div className="flex flex-row items-stretch gap-x-2 rounded-xl bg-light-grey px-3 py-2">
             {switches}
         </div>
     )

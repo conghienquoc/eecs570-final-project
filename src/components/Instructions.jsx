@@ -8,7 +8,7 @@ const styles = {
     ].join(' '),
 };
 
-const Instructions = ({currentSteps, sendRequest}) => {
+const Instructions = ({currentSteps, executeProcessorAction, getNextStep}) => {
     const [input1, setInput1] = useState("");
     const [input2, setInput2] = useState("");
     const [input3, setInput3] = useState("");
@@ -34,16 +34,25 @@ const Instructions = ({currentSteps, sendRequest}) => {
 
     return (
         <div>
-            <h2 className="text-lg font-bold">Instructions</h2>
+            <div className="flex flex-row justify-between">
+                <h2 className="text-lg font-bold">Instructions</h2>
+                <div className="flex flex-row gap-x-2">
+                    <button className={styles.button + ' bg-offwhite'}
+                        onClick={() => getNextStep()}
+                    >
+                        Step &gt;
+                    </button>
+                </div>
+            </div>
             <div className="mt-4 grid grid-cols-3 gap-4">
                 <button className="rounded-lg p-2 bg-red text-white"
-                    onClick={() => sendRequest(0, 'GET_S')}
+                    onClick={() => executeProcessorAction(0, 'Load')}
                 >
                     Read Processor 1
                 </button>
                 <div className="flex flex-col">
                     <button className="rounded-lg p-2 bg-red text-white mb-1"
-                        onClick={() => sendRequest(0, 'GET_M', input1)}
+                        onClick={() => executeProcessorAction(0, 'Store', input1)}
                     >
                         Write Processor 1
                     </button>
@@ -57,18 +66,18 @@ const Instructions = ({currentSteps, sendRequest}) => {
                 </div>
                 
                 <button className="rounded-lg p-2 bg-red text-white"
-                    onClick={() => sendRequest(0, 'EVICT')}
+                    onClick={() => executeProcessorAction(0, 'Evict')}
                 >
                     Evict Processor 1
                 </button>
                 <button className="rounded-lg p-2 bg-red text-white"
-                    onClick={() => sendRequest(1, 'GET_S')}
+                    onClick={() => executeProcessorAction(1, 'Load')}
                 >
                     Read Processor 2
                 </button>
                 <div className="flex flex-col">
                     <button className="rounded-lg p-2 bg-red text-white mb-1"
-                        onClick={() => sendRequest(1, 'GET_M', input1)}
+                        onClick={() => executeProcessorAction(1, 'Store', input1)}
                     >
                         Write Processor 2
                     </button>
@@ -80,18 +89,18 @@ const Instructions = ({currentSteps, sendRequest}) => {
                     </div>
                 </div>
                 <button className="rounded-lg p-2 bg-red text-white"
-                    onClick={() => sendRequest(1, 'EVICT')}
+                    onClick={() => executeProcessorAction(1, 'Evict')}
                 >
                     Evict Processor 2
                 </button>  
                 <button className="rounded-lg p-2 bg-red text-white"
-                    onClick={() => sendRequest(2, 'GET_S')}
+                    onClick={() => executeProcessorAction(2, 'Load')}
                 >
                     Read Processor 3
                 </button>
                 <div className="flex flex-col">
                     <button className="rounded-lg p-2 bg-red text-white mb-1"
-                        onClick={() => sendRequest(2, 'GET_M', input1)}
+                        onClick={() => executeProcessorAction(2, 'Store', input1)}
                     >
                         Write Processor 3
                     </button>
@@ -103,7 +112,7 @@ const Instructions = ({currentSteps, sendRequest}) => {
                     </div>                    
                 </div>
                 <button className="rounded-lg p-2 bg-red text-white"
-                    onClick={() => sendRequest(2, 'EVICT')}
+                    onClick={() => executeProcessorAction(2, 'Evict')}
                 >
                     Evict Processor 3
                 </button>              

@@ -46,7 +46,7 @@ const colors = [
 ]
 
 
-const Simulation = ({processors, memory, current_steps, setProcessors, setMemory, lines, tooltip_buttons, setTooltipButtons}) => {
+const Simulation = ({processors, memory, current_steps, setProcessors, setMemory, setBusInstructions, lines, tooltip_buttons, setTooltipButtons}) => {
     
     // var lines = []
     var existing_edges = [] // Keep track of pairs of endpoints to handle overlapping
@@ -86,6 +86,7 @@ const Simulation = ({processors, memory, current_steps, setProcessors, setMemory
     }
 
     const updateProc = (proc_idx, new_val, new_state) => {
+        console.log(new_state);
         if (processors[proc_idx].new_value === new_val && processors[proc_idx].new_state === new_state) return;
 
         var new_processors = processors.slice(0);
@@ -137,7 +138,7 @@ const Simulation = ({processors, memory, current_steps, setProcessors, setMemory
     }
 
     const processor_divs = processors.map((p, i) => 
-        <div id={'P' + (i+1) + '-wrapper'} className="relative">
+        <div key={'P' + (i+1)} id={'P' + (i+1) + '-wrapper'} className="relative">
             <Processor id={i+1} cache={p}/>
 
             <div className="absolute flex flex-col top-0 right-[-2.5rem] gap-1">
@@ -212,7 +213,8 @@ const Simulation = ({processors, memory, current_steps, setProcessors, setMemory
                 'index': i,
                 'action': step['action'],
                 'value': step['value'],
-                'state': step['state'] !== undefined ? CoherencyState[step['state']] : undefined,
+                // 'state': step['state'] !== undefined ? CoherencyState[step['state']] : undefined,
+                'state': step['state'],
             })
             setTooltipButtons(new_tooltip_buttons);
 

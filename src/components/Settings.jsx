@@ -37,7 +37,7 @@ const Settings = ({setProcessors, setMemory}) => {
                 return {
                     state: CoherencyState['Invalid'],
                     register: proc.register,
-                    value: proc.value,
+                    value: proc.value === 9223372036854776000 ? '' : proc.value,   // 9223372036854776000 is undefined value in the backend
                     new_value: null,
                     new_state: null,
                 }
@@ -62,21 +62,23 @@ const Settings = ({setProcessors, setMemory}) => {
 
     return (
         <div className="flex flex-col gap-y-2">
-            <Switch 
-                options={[schemes.snooping, schemes.directory]}
-                active={scheme}
-                toggleFunc={setScheme}
-            />
-            <Switch
-                options={Object.values(protocols)}
-                active={protocol}
-                toggleFunc={setProtocol}
-            />
-            <Switch
-                options={Object.values(transients)}
-                active={transient}
-                toggleFunc={setTransient}
-            />
+            <div className="flex flex-col gap-y-2 items-stretch">
+                <Switch 
+                    options={[schemes.snooping, schemes.directory]}
+                    active={scheme}
+                    toggleFunc={setScheme}
+                />
+                <Switch
+                    options={Object.values(protocols)}
+                    active={protocol}
+                    toggleFunc={setProtocol}
+                />
+                <Switch
+                    options={Object.values(transients)}
+                    active={transient}
+                    toggleFunc={setTransient}
+                />
+            </div>
             <button className="rounded-lg bg-blue p-2 text-white"
                 onClick={() => getInitialState()}
             >
