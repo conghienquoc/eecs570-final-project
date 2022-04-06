@@ -19,14 +19,15 @@ const actions = {
     busRd: "BusRead",
     busReply: "BusReply",
     update: "Update",
+    data: "Data",
 }
 
 const num_to_id = {
     "0": "P1",
     "1": "P2",
     "2": "P3",
-    "-1": "main_memory",
-    "-2": "bus",
+    "-1": "Memory",
+    "-2": "Bus",
 }
 
 const num_to_index = {
@@ -46,10 +47,10 @@ const colors = [
 ]
 
 
-const Simulation = ({processors, memory, current_steps, setProcessors, setMemory, setBusInstructions, lines, tooltip_buttons, setTooltipButtons}) => {
+const Simulation = ({processors, memory, bus_instructions, current_steps, setProcessors, setBusInstructions, setMemory, lines, tooltip_buttons, setTooltipButtons}) => {
     
     // var lines = []
-    var existing_edges = [] // Keep track of pairs of endpoints to handle overlapping
+    let existing_edges = [] // Keep track of pairs of endpoints to handle overlapping
     // const [existing_edges, setExistingEdges] = useState([]);    
 
     const showLine = (line) => {
@@ -85,6 +86,55 @@ const Simulation = ({processors, memory, current_steps, setProcessors, setMemory
         )
     }
 
+    const create_step_buttons = (index_in_tooltip_buttons) => {
+        return tooltip_buttons[index_in_tooltip_buttons].map((btn) => {
+            const color = colors[btn.index];
+
+            // Update actions
+            if (btn.action === actions.update) {
+                if (btn.src === -2) {
+                    throw 'Cannot update bus';
+                }
+                else if (btn.src === -1) {
+                    updateProc(btn.value);
+                    return step_button(btn.index, color, () => {
+                        showMemoryChange(color);
+                    });
+                }
+                else {
+                    updateProc(btn.src, btn.value, btn.state);
+                    return step_button(btn.index, color, () => {
+                        showProcChange(btn.src, color);
+                    });
+                }                        
+            }
+
+            // Other actions
+            // Add connecting line and tooltip button
+            let newLine = null;
+            if (btn.src !== btn.dst) {
+                // If there's already a line between these two nodes 
+                // then the new line should be drawn from different points to avoid overlapping
+                const edge = [Math.min(btn.src, btn.dst), Math.max(btn.src, btn.dst)].join();
+                var end_socket = "auto";
+                if (existing_edges.includes(edge)) {
+                    end_socket = "bottom";
+                }
+                else {
+                    existing_edges.push(edge); 
+                }
+
+                // If memory sending data, then specify the value
+                let label = btn.action === actions.data ? `${btn.action}: ${btn.value}` : btn.action;
+
+                newLine = createLine(num_to_id[btn.src.toString()], num_to_id[btn.dst.toString()], label, end_socket, color);
+                lines.push(newLine);                         
+            }
+
+            return step_button(btn.index, color, () => showLine(newLine));
+        })
+    }
+
     const updateProc = (proc_idx, new_val, new_state) => {
         console.log(new_state);
         if (processors[proc_idx].new_value === new_val && processors[proc_idx].new_state === new_state) return;
@@ -110,9 +160,9 @@ const Simulation = ({processors, memory, current_steps, setProcessors, setMemory
         // Update value if new value changes
         if (processors[proc_idx].new_value !== processors[proc_idx].value) {            
             // Prevent value keep changing with multiple button clicks
-            if (typeof(new_processors[proc_idx].value) == "number") {
+            // if (typeof(new_processors[proc_idx].value) == "number") {
                 new_processors[proc_idx].value = <span><del>{new_processors[proc_idx].value}</del> <strong className={`text-[${color}]`}>{processors[proc_idx].new_value}</strong></span>;
-            }
+            // }
         }
 
         // Update state if new state changes
@@ -137,65 +187,56 @@ const Simulation = ({processors, memory, current_steps, setProcessors, setMemory
         setMemory(new_memory);
     }
 
+
+    
+
+    // Divs for all the subparts so we can have dynamic buttons for the lines
+
     const processor_divs = processors.map((p, i) => 
         <div key={'P' + (i+1)} id={'P' + (i+1) + '-wrapper'} className="relative">
             <Processor id={i+1} cache={p}/>
 
             <div className="absolute flex flex-col top-0 right-[-2.5rem] gap-1">
-                {tooltip_buttons[i].map((btn) => {
-                    const color = colors[btn.index];
-
-                    // Update actions
-                    if (btn.action === actions.update) {
-                        if (btn.src === -2) {
-                            throw 'Cannot update bus';
-                        }
-                        else if (btn.src === -1) {
-                            updateProc(btn.value);
-                            return step_button(btn.index, color, () => {
-                                showMemoryChange(color);
-                            });
-                        }
-                        else {
-                            updateProc(btn.src, btn.value, btn.state);
-                            return step_button(btn.index, color, () => {
-                                showProcChange(btn.src, color);
-                            });
-                        }                        
-                    }
-
-                    // Other actions
-                    // Add connecting line and tooltip button
-                    var newLine = null;
-                    if (btn.src !== btn.dst) {
-                        // If there's already a line between these two nodes 
-                        // then the new line should be drawn from different points to avoid overlapping
-                        const edge = [Math.min(btn.src, btn.dst), Math.max(btn.src, btn.dst)].join();
-                        var end_socket = "auto";
-                        if (existing_edges.includes(edge)) {
-                            end_socket = "bottom";
-                        }
-                        else {
-                            existing_edges.push(edge); 
-                        }
-
-                        newLine = createLine(num_to_id[btn.src.toString()], num_to_id[btn.dst.toString()], btn.action, end_socket, color);
-                        lines.push(newLine);                         
-                    }
-
-                    return step_button(btn.index, color, () => showLine(newLine));
-                })}
+                {create_step_buttons(i)}
             </div>            
         </div>
     )
+
+    const memory_div = (
+        <div className="relative">
+            <MainMemory cache={memory} />
+
+            <div className="absolute flex flex-col top-0 left-[-2.5rem] gap-1">
+                {/* 3 is index of main memory in tooltip buttons */}
+                {create_step_buttons(3)}
+            </div>  
+        </div>
+    )
+
+    const bus_div = (
+        <div className="relative self-stretch">
+            <Bus/>
+
+            <div className="absolute flex flex-col top-0 right-[-2.5rem] gap-1">
+                {/* 4 is index of main memory in tooltip buttons */}
+                {create_step_buttons(4)}
+            </div>  
+        </div>
+    )
+
+    const bus_instruction_buttons = bus_instructions.map((instruction, i) => 
+        <button className="rounded-lg px-6 py-3 bg-red text-white">
+            {instruction.action} from {num_to_id[instruction.src.toString()]}
+        </button>
+    )
     
-    // Add tooltip for each step
+    // Add tooltip for each step and update bus instructions
     useEffect(() => {
         if (current_steps.length === 0) return;
         
         current_steps.forEach((step, i) => {
-            var src;
-            var dst;
+            let src;
+            let dst;
 
             if (step['action'] === actions.update) {
                 src = step['target'];
@@ -206,46 +247,53 @@ const Simulation = ({processors, memory, current_steps, setProcessors, setMemory
                 dst = step['dst'];
             }
 
-            var new_tooltip_buttons = tooltip_buttons.slice(0);
-            new_tooltip_buttons[num_to_index[src.toString()]].push({
+            let action = {
                 'src': src,
                 'dst': dst,
                 'index': i,
                 'action': step['action'],
-                'value': step['value'],
+                'value': step['value'] === 9223372036854776000 ? '' : step['value'],        // 9223372036854776000 is undefined val in backend
                 // 'state': step['state'] !== undefined ? CoherencyState[step['state']] : undefined,
                 'state': step['state'],
-            })
+            }
+
+            // Add action to be processed in bus
+            if (dst === -2) {
+                let new_bus_instructions = bus_instructions.slice(0);
+                new_bus_instructions.push(action);
+                setBusInstructions(new_bus_instructions);
+            }
+
+            // Add tooltip buttons
+            let new_tooltip_buttons = tooltip_buttons.slice(0);
+            new_tooltip_buttons[num_to_index[src.toString()]].push(action);
             setTooltipButtons(new_tooltip_buttons);
 
         });
     }, [current_steps])
 
     return (
-        <div className="flex flex-row gap-x-28 items-center justify-between">
-            <span className="bg-[#F45B69] bg-[#59C3C3] bg-[#FF9505] bg-[#4062BB] bg-[#548C2F]
-                             text-[#F45B69] text-[#59C3C3] text-[#FF9505] text-[#4062BB] text-[#548C2F] hidden"></span>
-            <div className="flex flex-col gap-y-16">
-                {processor_divs}
+        <div>
+            <div className="flex flex-row gap-x-28 items-center justify-between">
+                <span className="bg-[#F45B69] bg-[#59C3C3] bg-[#FF9505] bg-[#4062BB] bg-[#548C2F]
+                                text-[#F45B69] text-[#59C3C3] text-[#FF9505] text-[#4062BB] text-[#548C2F] hidden"></span>
+                <div className="flex flex-col gap-y-16">
+                    {processor_divs}
 
-                {/* <button onClick={() => {
-                    lines.forEach((line) => {
-                        line.remove();
-                    });
-                    
-                    lines = [];
-                    existing_edges = [];
-                }}>
-                    clear lines
-                </button> */}
+                </div>
+
+                {bus_div}
+                
+                {memory_div}          
             </div>
-            <div className="relative self-stretch">
-                <Bus/>
+
+            <div className="mt-10 flex flex-col justify-center ml-28 items-center gap-y-2">
+                <h2 className="text-lg font-bold">Bus instructions to be executed</h2>
+                {bus_instruction_buttons}
             </div>
-            <div className="relative">
-                <MainMemory cache={memory} />
-            </div>            
+            
         </div>
+        
     )
 }
 

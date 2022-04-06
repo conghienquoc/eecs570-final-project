@@ -62,12 +62,13 @@ function App() {
     setTooltipButtons([[], [], [], [], []])
   }
 
+  const clearBusInstructions = () => {
+    setBusInstructions([]);
+  }
+
 const executeProcessorAction = (proc_num, action, value=null) => {
     // Make sure to save changes before sending request
-    clearLines();
-    clearTooltips();
-    commitMemory();
-    commitProcs();
+    clearAndCommit();
 
     var body = {
         'processor': proc_num,
@@ -81,6 +82,17 @@ const executeProcessorAction = (proc_num, action, value=null) => {
     API.executeProcessorAction(body).then( res=> {
       setCurrentSteps(res);
     })
+  }
+
+
+  // Clear lines and save changes made to processors/memory
+  // SHould be called before next steps
+  const clearAndCommit = () => {
+    clearLines();
+    clearTooltips();
+    commitMemory();
+    commitProcs();
+    clearBusInstructions();
   }
 
   const commitProcs = () => {
@@ -102,18 +114,16 @@ const executeProcessorAction = (proc_num, action, value=null) => {
   }
 
   const getNextStep = () => {
-    executeBusEvents({});
-    getBusEvents();
-  }
+    // Make sure to save changes before sending request
+    clearAndCommit();
 
-  const executeBusEvents = (body) => {
-    console.log('executeBusEvents');
-    API.executeBusEvents(body);
-  }
+    console.log('Execute bus event');
+    API.executeBusEvent({'busIndex': 0}).then( res=> {
+      setCurrentSteps(res);
 
-  const getBusEvents = () => {
-    console.log('getBusEvents');
-    API.getBusEvents();
+      console.log('Get bus event');
+      API.getBusEvents();
+    });    
   }
 
   return (
@@ -140,6 +150,7 @@ const executeProcessorAction = (proc_num, action, value=null) => {
             memory={memory}
             setProcessors={setProcessors}
             setMemory={setMemory}
+            bus_instructions={bus_instructions}
             setBusInstructions={setBusInstructions}
             lines={lines}
             tooltip_buttons={tooltip_buttons}

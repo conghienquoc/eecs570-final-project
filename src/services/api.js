@@ -57,10 +57,10 @@ class API {
         return response.data;
     }
 
-    async executeBusEvents(paramObj) {
+    async executeBusEvent(paramObj) {
         const response = await http({
             method: 'POST',
-            url: "execute_bus_events",
+            url: "execute_bus_event",
             data: paramObj,
         })
         console.log(response.data)  

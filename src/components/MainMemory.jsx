@@ -13,7 +13,7 @@ const MainMemory = ({cache}) => {
 
 
     return (
-        <div id="main_memory" className="flex flex-col gap-y-2">
+        <div id="Memory" className="flex flex-col gap-y-2">
             <div className="rounded-lg px-3 py-1 border border-offblack text-center font-bold">
                 Main Memory
             </div>

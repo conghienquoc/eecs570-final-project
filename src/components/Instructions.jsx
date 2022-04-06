@@ -52,7 +52,7 @@ const Instructions = ({currentSteps, executeProcessorAction, getNextStep}) => {
                 </button>
                 <div className="flex flex-col">
                     <button className="rounded-lg p-2 bg-red text-white mb-1"
-                        onClick={() => executeProcessorAction(0, 'Store', input1)}
+                        onClick={() => executeProcessorAction(0, 'Store', parseInt(input1))}
                     >
                         Write Processor 1
                     </button>
@@ -77,7 +77,7 @@ const Instructions = ({currentSteps, executeProcessorAction, getNextStep}) => {
                 </button>
                 <div className="flex flex-col">
                     <button className="rounded-lg p-2 bg-red text-white mb-1"
-                        onClick={() => executeProcessorAction(1, 'Store', input1)}
+                        onClick={() => executeProcessorAction(1, 'Store', parseInt(input2))}
                     >
                         Write Processor 2
                     </button>
@@ -100,7 +100,7 @@ const Instructions = ({currentSteps, executeProcessorAction, getNextStep}) => {
                 </button>
                 <div className="flex flex-col">
                     <button className="rounded-lg p-2 bg-red text-white mb-1"
-                        onClick={() => executeProcessorAction(2, 'Store', input1)}
+                        onClick={() => executeProcessorAction(2, 'Store', parseInt(input3))}
                     >
                         Write Processor 3
                     </button>
