@@ -5,10 +5,15 @@ const styles = {
     button: [
         'px-3', 'py-1',
         'rounded-lg',
+        'disabled:bg-medium-grey',
+    ].join(' '),
+    proc_button: [
+        'rounded-lg', 'p-2', 'bg-red', 'text-white',
+        'disabled:bg-medium-grey',
     ].join(' '),
 };
 
-const Instructions = ({currentSteps, executeProcessorAction, getNextStep}) => {
+const Instructions = ({currentSteps, executeProcessorAction, getNextStep, hideStepButton, disableStepButton, disableProcButtons}) => {
     const [input1, setInput1] = useState("");
     const [input2, setInput2] = useState("");
     const [input3, setInput3] = useState("");
@@ -36,8 +41,10 @@ const Instructions = ({currentSteps, executeProcessorAction, getNextStep}) => {
         <div>
             <div className="flex flex-row justify-between">
                 <h2 className="text-lg font-bold">Instructions</h2>
-                <div className="flex flex-row gap-x-2">
-                    <button className={styles.button + ' bg-offwhite'}
+
+                {/* // Only show step button if in atomic mode */}
+                <div className={"flex flex-row gap-x-2 " + (hideStepButton ? "hidden" : "")}>
+                    <button disabled={disableStepButton} className={styles.button + ' bg-green text-white'}
                         onClick={() => getNextStep()}
                     >
                         Step &gt;
@@ -45,18 +52,18 @@ const Instructions = ({currentSteps, executeProcessorAction, getNextStep}) => {
                 </div>
             </div>
             <div className="mt-4 grid grid-cols-3 gap-4">
-                <button className="rounded-lg p-2 bg-red text-white"
+                <button disabled={disableProcButtons} className={styles.proc_button}
                     onClick={() => executeProcessorAction(0, 'Load')}
                 >
                     Read Processor 1
                 </button>
                 <div className="flex flex-col">
-                    <button className="rounded-lg p-2 bg-red text-white mb-1"
+                    <button disabled={disableProcButtons} className={styles.proc_button}
                         onClick={() => executeProcessorAction(0, 'Store', parseInt(input1))}
                     >
                         Write Processor 1
                     </button>
-                    <div>
+                    <div className="mt-1">
                         Value:
                         <input className="ml-2 text-offblack border border-offblack rounded-md" size = "5" value={input1}
                             onChange={handleTextInput1}
@@ -65,53 +72,53 @@ const Instructions = ({currentSteps, executeProcessorAction, getNextStep}) => {
                     
                 </div>
                 
-                <button className="rounded-lg p-2 bg-red text-white"
+                <button disabled={disableProcButtons} className={styles.proc_button}
                     onClick={() => executeProcessorAction(0, 'Evict')}
                 >
                     Evict Processor 1
                 </button>
-                <button className="rounded-lg p-2 bg-red text-white"
+                <button disabled={disableProcButtons} className={styles.proc_button}
                     onClick={() => executeProcessorAction(1, 'Load')}
                 >
                     Read Processor 2
                 </button>
                 <div className="flex flex-col">
-                    <button className="rounded-lg p-2 bg-red text-white mb-1"
+                    <button disabled={disableProcButtons} className={styles.proc_button}
                         onClick={() => executeProcessorAction(1, 'Store', parseInt(input2))}
                     >
                         Write Processor 2
                     </button>
-                    <div>
+                    <div className="mt-1">
                         Value:
                         <input className="ml-2 text-offblack border border-offblack rounded-md" size = "5" value={input2}
                             onChange={handleTextInput2}
                         />
                     </div>
                 </div>
-                <button className="rounded-lg p-2 bg-red text-white"
+                <button disabled={disableProcButtons} className={styles.proc_button}
                     onClick={() => executeProcessorAction(1, 'Evict')}
                 >
                     Evict Processor 2
                 </button>  
-                <button className="rounded-lg p-2 bg-red text-white"
+                <button disabled={disableProcButtons} className={styles.proc_button}
                     onClick={() => executeProcessorAction(2, 'Load')}
                 >
                     Read Processor 3
                 </button>
                 <div className="flex flex-col">
-                    <button className="rounded-lg p-2 bg-red text-white mb-1"
+                    <button disabled={disableProcButtons} className={styles.proc_button}
                         onClick={() => executeProcessorAction(2, 'Store', parseInt(input3))}
                     >
                         Write Processor 3
                     </button>
-                    <div>
+                    <div className="mt-1">
                         Value:
                         <input className="ml-2 text-offblack border border-offblack rounded-md" size = "5" value={input3}
                             onChange={handleTextInput3}
                         />
                     </div>                    
                 </div>
-                <button className="rounded-lg p-2 bg-red text-white"
+                <button disabled={disableProcButtons} className={styles.proc_button}
                     onClick={() => executeProcessorAction(2, 'Evict')}
                 >
                     Evict Processor 3

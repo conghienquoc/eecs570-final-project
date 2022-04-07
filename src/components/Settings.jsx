@@ -4,32 +4,33 @@ import API from '../services/api';
 import CoherencyState from "../utils/coherency-states";
 
 
-const schemes = {
-    snooping: 'Snooping-based',
-    directory: 'Directory-based'
-}
-
 const protocols = {
     msi: 'MSI',
     mesi: 'MESI',
     mosi: 'MOSI'
 }
 
-const transients = {
-    no: 'Non-Transient',
-    yes: 'Transient'    
+// To send to backend API
+const type_backend = {
+    "Atomic": "baseline",
+    "Split Transaction": "split",
+};
+
+// To display on the frontend
+const type_display = {
+    atomic: "Atomic",
+    split: "Split Transaction",
 }
 
-const Settings = ({setProcessors, setMemory}) => {
-    const [scheme, setScheme] = useState(schemes.snooping);
+const Settings = ({setProcessors, setMemory, setCurrentType}) => {
     const [protocol, setProtocol] = useState(protocols.msi);
-    const [transient, setTransient] = useState(transients.no);
+    const [type, setType] = useState(type_display.atomic);
 
     const getInitialState = () => {
+        setCurrentType("");     // Reset current type for app
         var params = {
-            scheme: scheme === schemes.snooping ? 'snooping' : 'directory',
             protocol: protocol.toLowerCase(),
-            transient: transient === transients.yes,
+            type: type_backend[type],
         };
         API.getInitialState(params).then( res => {
             // Set initial state for all processors
@@ -43,6 +44,7 @@ const Settings = ({setProcessors, setMemory}) => {
                 }
             })
             setProcessors(procs_initial_state);
+            setCurrentType(type);   // Set current type for app to disable correct buttons
 
             // Set initial state for main memory
             var memory_initial_state = {
@@ -63,20 +65,15 @@ const Settings = ({setProcessors, setMemory}) => {
     return (
         <div className="flex flex-col gap-y-2">
             <div className="flex flex-col gap-y-2 items-stretch">
-                <Switch 
-                    options={[schemes.snooping, schemes.directory]}
-                    active={scheme}
-                    toggleFunc={setScheme}
-                />
                 <Switch
                     options={Object.values(protocols)}
                     active={protocol}
                     toggleFunc={setProtocol}
                 />
                 <Switch
-                    options={Object.values(transients)}
-                    active={transient}
-                    toggleFunc={setTransient}
+                    options={Object.values(type_display)}
+                    active={type}
+                    toggleFunc={setType}
                 />
             </div>
             <button className="rounded-lg bg-blue p-2 text-white"

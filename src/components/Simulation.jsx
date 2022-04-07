@@ -47,7 +47,14 @@ const colors = [
 ]
 
 
-const Simulation = ({processors, memory, bus_instructions, current_steps, setProcessors, setBusInstructions, setMemory, lines, tooltip_buttons, setTooltipButtons}) => {
+const Simulation = (
+    {
+        processors, memory, bus_instructions, current_steps,
+        setProcessors, setBusInstructions, setMemory,
+        lines, tooltip_buttons, setTooltipButtons,
+        disableBusButtons, getNextStep
+    }
+) => {
     
     // var lines = []
     let existing_edges = [] // Keep track of pairs of endpoints to handle overlapping
@@ -158,11 +165,11 @@ const Simulation = ({processors, memory, bus_instructions, current_steps, setPro
         var new_processors = processors.slice(0);
 
         // Update value if new value changes
-        if (processors[proc_idx].new_value !== processors[proc_idx].value) {            
+        if ((processors[proc_idx].new_value || new_processors[proc_idx].value === "") && processors[proc_idx].new_value !== processors[proc_idx].value) {            
             // Prevent value keep changing with multiple button clicks
-            // if (typeof(new_processors[proc_idx].value) == "number") {
+            if (typeof(new_processors[proc_idx].value) == "number" || new_processors[proc_idx].value === "") {
                 new_processors[proc_idx].value = <span><del>{new_processors[proc_idx].value}</del> <strong className={`text-[${color}]`}>{processors[proc_idx].new_value}</strong></span>;
-            // }
+            }
         }
 
         // Update state if new state changes
@@ -224,8 +231,11 @@ const Simulation = ({processors, memory, bus_instructions, current_steps, setPro
         </div>
     )
 
+    // Only allow bus buttons to be clicked in split transaction mode
     const bus_instruction_buttons = bus_instructions.map((instruction, i) => 
-        <button className="rounded-lg px-6 py-3 bg-red text-white">
+        <button className="rounded-lg px-6 py-3 bg-red text-white disabled:bg-medium-grey" disabled={disableBusButtons}
+            onClick={() => getNextStep(i)}
+        >
             {instruction.action} from {num_to_id[instruction.src.toString()]}
         </button>
     )

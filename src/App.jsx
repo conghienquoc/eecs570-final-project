@@ -12,6 +12,12 @@ const coherency_states = {
   'Modified': 'M',
 }
 
+const types = {
+  unspecified: "",
+  atomic: "Atomic",
+  split: "Split Transaction",
+}
+
 
 function App() {
   const [currentSteps, setCurrentSteps] = useState([])
@@ -46,6 +52,7 @@ function App() {
   const [bus_instructions, setBusInstructions] = useState([]);
   const [lines, setLines] = useState([]); // Keep track of all lines created to remove at the end
   const [tooltip_buttons, setTooltipButtons] = useState([[], [], [], [], []]);   // Arr of 5 elts [p0, p1, p2, mem, bus]
+  const [currentType, setCurrentType] = useState(types.unspecified);   // Keep track of current type to know to disable correct buttons
 
   const clearLines = () => {
     console.log(lines);
@@ -53,8 +60,6 @@ function App() {
         line.remove();
     });
     
-    // lines = [];
-    // existing_edges = [];
     setLines([]);    
 }
 
@@ -113,12 +118,12 @@ const executeProcessorAction = (proc_num, action, value=null) => {
       setMemory(new_memory);
   }
 
-  const getNextStep = () => {
+  const getNextStep = (busIndex=0) => {
     // Make sure to save changes before sending request
     clearAndCommit();
 
     console.log('Execute bus event');
-    API.executeBusEvent({'busIndex': 0}).then( res=> {
+    API.executeBusEvent({'busIndex': busIndex}).then( res=> {
       setCurrentSteps(res);
 
       console.log('Get bus event');
@@ -136,11 +141,18 @@ const executeProcessorAction = (proc_num, action, value=null) => {
 
       <div className='flex flex-row'>
         <div className='flex flex-col pr-4 w-1/2 xl:w-2/5 gap-y-8'>
-          <Settings setProcessors={setProcessors} setMemory={setMemory}/>
+          <Settings
+            setProcessors={setProcessors}
+            setMemory={setMemory}
+            setCurrentType={setCurrentType}
+          />
           <Instructions
             currentSteps={currentSteps}
             executeProcessorAction={executeProcessorAction}
             getNextStep={getNextStep}
+            disableStepButton={currentSteps.length === 0}  // Disable step button if no more steps for current action
+            hideStepButton={currentType !== types.atomic}  // Only show step button if in atomic mode
+            disableProcButtons={currentSteps.length !== 0}
           />
         </div>
         <div className='pl-4 w-1/2 xl:w-3/5 min-w-fit'>
@@ -155,6 +167,8 @@ const executeProcessorAction = (proc_num, action, value=null) => {
             lines={lines}
             tooltip_buttons={tooltip_buttons}
             setTooltipButtons={setTooltipButtons}
+            disableBusButtons={currentType !== types.split}   // Only allow bus buttons to be clicked in split transaction mode
+            getNextStep={getNextStep}
           />
 
           <div className='mt-10'>
