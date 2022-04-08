@@ -53,6 +53,7 @@ function App() {
   const [lines, setLines] = useState([]); // Keep track of all lines created to remove at the end
   const [tooltip_buttons, setTooltipButtons] = useState([[], [], [], [], []]);   // Arr of 5 elts [p0, p1, p2, mem, bus]
   const [currentType, setCurrentType] = useState(types.unspecified);   // Keep track of current type to know to disable correct buttons
+  const [isRunning, setRunning] = useState(false);
 
   const clearLines = () => {
     console.log(lines);
@@ -86,6 +87,9 @@ const executeProcessorAction = (proc_num, action, value=null) => {
 
     API.executeProcessorAction(body).then( res=> {
       setCurrentSteps(res);
+
+      // If doing split transaction then update bus as well
+      API.getBusEvents().then( busEvents => {setBusInstructions(busEvents)});
     })
   }
 
@@ -122,12 +126,12 @@ const executeProcessorAction = (proc_num, action, value=null) => {
     // Make sure to save changes before sending request
     clearAndCommit();
 
-    console.log('Execute bus event');
+    console.log(`Execute bus event at index ${busIndex}`);
     API.executeBusEvent({'busIndex': busIndex}).then( res=> {
       setCurrentSteps(res);
 
       console.log('Get bus event');
-      API.getBusEvents();
+      API.getBusEvents().then( busEvents => {setBusInstructions(busEvents)});
     });    
   }
 
@@ -145,6 +149,7 @@ const executeProcessorAction = (proc_num, action, value=null) => {
             setProcessors={setProcessors}
             setMemory={setMemory}
             setCurrentType={setCurrentType}
+            setRunning={setRunning}
           />
           <Instructions
             currentSteps={currentSteps}
@@ -152,7 +157,7 @@ const executeProcessorAction = (proc_num, action, value=null) => {
             getNextStep={getNextStep}
             disableStepButton={currentSteps.length === 0}  // Disable step button if no more steps for current action
             hideStepButton={currentType !== types.atomic}  // Only show step button if in atomic mode
-            disableProcButtons={currentSteps.length !== 0}
+            disableProcButtons={!isRunning || (currentType !== types.split && currentSteps.length !== 0)}
           />
         </div>
         <div className='pl-4 w-1/2 xl:w-3/5 min-w-fit'>

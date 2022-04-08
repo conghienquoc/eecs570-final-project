@@ -103,7 +103,7 @@ const Simulation = (
                     throw 'Cannot update bus';
                 }
                 else if (btn.src === -1) {
-                    updateProc(btn.value);
+                    updateMemory(btn.value);
                     return step_button(btn.index, color, () => {
                         showMemoryChange(color);
                     });
@@ -143,7 +143,6 @@ const Simulation = (
     }
 
     const updateProc = (proc_idx, new_val, new_state) => {
-        console.log(new_state);
         if (processors[proc_idx].new_value === new_val && processors[proc_idx].new_state === new_state) return;
 
         var new_processors = processors.slice(0);
@@ -165,7 +164,7 @@ const Simulation = (
         var new_processors = processors.slice(0);
 
         // Update value if new value changes
-        if ((processors[proc_idx].new_value || new_processors[proc_idx].value === "") && processors[proc_idx].new_value !== processors[proc_idx].value) {            
+        if ((processors[proc_idx].new_value || processors[proc_idx].new_state === 'I') && processors[proc_idx].new_value !== processors[proc_idx].value) {            
             // Prevent value keep changing with multiple button clicks
             if (typeof(new_processors[proc_idx].value) == "number" || new_processors[proc_idx].value === "") {
                 new_processors[proc_idx].value = <span><del>{new_processors[proc_idx].value}</del> <strong className={`text-[${color}]`}>{processors[proc_idx].new_value}</strong></span>;
@@ -189,6 +188,14 @@ const Simulation = (
         // Prevent value keep changing with multiple button clicks
         if (memory.new_value !== memory.value && typeof(memory.value) == "number") {
             new_memory.value = <span><del>{memory.value}</del> <strong className={`text-[${color}]`}>{memory.new_value}</strong></span>;
+        }
+
+        // Update value if new value changes
+        if (memory.new_value && memory.new_value !== memory.value) {            
+            // Prevent value keep changing with multiple button clicks
+            if (typeof(memory.value) == "number") {
+                new_memory.value = <span><del>{memory.value}</del> <strong className={`text-[${color}]`}>{memory.new_value}</strong></span>;
+            }
         }
 
         setMemory(new_memory);
@@ -233,7 +240,7 @@ const Simulation = (
 
     // Only allow bus buttons to be clicked in split transaction mode
     const bus_instruction_buttons = bus_instructions.map((instruction, i) => 
-        <button className="rounded-lg px-6 py-3 bg-red text-white disabled:bg-medium-grey" disabled={disableBusButtons}
+        <button className="rounded-lg px-6 py-3 bg-red text-white disabled:bg-light-grey disabled:text-medium-grey" disabled={disableBusButtons}
             onClick={() => getNextStep(i)}
         >
             {instruction.action} from {num_to_id[instruction.src.toString()]}
@@ -268,11 +275,11 @@ const Simulation = (
             }
 
             // Add action to be processed in bus
-            if (dst === -2) {
-                let new_bus_instructions = bus_instructions.slice(0);
-                new_bus_instructions.push(action);
-                setBusInstructions(new_bus_instructions);
-            }
+            // if (dst === -2) {
+            //     let new_bus_instructions = bus_instructions.slice(0);
+            //     new_bus_instructions.push(action);
+            //     setBusInstructions(new_bus_instructions);
+            // }
 
             // Add tooltip buttons
             let new_tooltip_buttons = tooltip_buttons.slice(0);

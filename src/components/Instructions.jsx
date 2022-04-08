@@ -5,11 +5,12 @@ const styles = {
     button: [
         'px-3', 'py-1',
         'rounded-lg',
-        'disabled:bg-medium-grey',
+        'disabled:bg-light-grey',
+        'disabled:text-medium-grey'
     ].join(' '),
     proc_button: [
         'rounded-lg', 'p-2', 'bg-red', 'text-white',
-        'disabled:bg-medium-grey',
+        'disabled:bg-light-grey', 'disabled:text-medium-grey'
     ].join(' '),
 };
 

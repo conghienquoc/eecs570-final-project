@@ -22,7 +22,7 @@ const type_display = {
     split: "Split Transaction",
 }
 
-const Settings = ({setProcessors, setMemory, setCurrentType}) => {
+const Settings = ({setProcessors, setMemory, setCurrentType, setRunning}) => {
     const [protocol, setProtocol] = useState(protocols.msi);
     const [type, setType] = useState(type_display.atomic);
 
@@ -45,6 +45,7 @@ const Settings = ({setProcessors, setMemory, setCurrentType}) => {
             })
             setProcessors(procs_initial_state);
             setCurrentType(type);   // Set current type for app to disable correct buttons
+            setRunning(true);
 
             // Set initial state for main memory
             var memory_initial_state = {
