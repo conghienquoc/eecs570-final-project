@@ -22,7 +22,7 @@ const type_display = {
     split: "Split Transaction",
 }
 
-const Settings = ({setProcessors, setMemory, setCurrentType, setRunning}) => {
+const Settings = ({setProcessors, setMemory, setCurrentType, setRunning, disableGetInitialState}) => {
     const [protocol, setProtocol] = useState(protocols.msi);
     const [type, setType] = useState(type_display.atomic);
 
@@ -77,7 +77,8 @@ const Settings = ({setProcessors, setMemory, setCurrentType, setRunning}) => {
                     toggleFunc={setType}
                 />
             </div>
-            <button className="rounded-lg bg-blue p-2 text-white"
+            <button className="rounded-lg bg-green p-2 text-white disabled:bg-light-grey disabled:text-medium-grey"
+                disabled={disableGetInitialState}
                 onClick={() => getInitialState()}
             >
                 Get initial state

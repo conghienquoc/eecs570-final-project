@@ -150,6 +150,7 @@ const executeProcessorAction = (proc_num, action, value=null) => {
             setMemory={setMemory}
             setCurrentType={setCurrentType}
             setRunning={setRunning}
+            disableGetInitialState={isRunning}
           />
           <Instructions
             currentSteps={currentSteps}
