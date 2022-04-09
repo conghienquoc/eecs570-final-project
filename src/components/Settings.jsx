@@ -29,7 +29,7 @@ const Settings = ({setProcessors, setMemory, setCurrentType, setRunning, disable
     const getInitialState = () => {
         setCurrentType("");     // Reset current type for app
         var params = {
-            protocol: protocol.toLowerCase(),
+            protocol: protocol,
             type: type_backend[type],
         };
         API.getInitialState(params).then( res => {

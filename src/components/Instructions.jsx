@@ -5,6 +5,7 @@ const styles = {
     button: [
         'px-3', 'py-1',
         'rounded-lg',
+        'text-white',
         'disabled:bg-light-grey',
         'disabled:text-medium-grey'
     ].join(' '),
