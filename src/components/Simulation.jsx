@@ -20,6 +20,7 @@ const actions = {
     busReply: "BusReply",
     update: "Update",
     data: "Data",
+    hit: "Hit",
 }
 
 const num_to_id = {
@@ -258,6 +259,10 @@ const Simulation = (
             if (step['action'] === actions.update) {
                 src = step['target'];
                 dst = src;
+            }
+            else if (step['action'] === actions.hit) {
+                alert("Cache hit!");
+                return;
             }
             else {
                 src = step['src'];

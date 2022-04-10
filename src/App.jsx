@@ -81,9 +81,6 @@ const executeProcessorAction = (proc_num, action, value=null) => {
         'action': action,
         'value': value
     }
-    // API.getNextStep(body).then( res => {
-    //     setCurrentSteps(res);
-    // })
 
     API.executeProcessorAction(body).then( res=> {
       setCurrentSteps(res);
