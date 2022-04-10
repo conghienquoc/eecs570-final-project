@@ -22,7 +22,7 @@ const type_display = {
     split: "Split Transaction",
 }
 
-const Settings = ({setProcessors, setMemory, setCurrentType, setRunning, disableGetInitialState}) => {
+const Settings = ({setProcessors, setMemory, setCurrentType, setRunning, disableGetInitialState, enableValidInstructions}) => {
     const [protocol, setProtocol] = useState(protocols.msi);
     const [type, setType] = useState(type_display.atomic);
 
@@ -54,6 +54,9 @@ const Settings = ({setProcessors, setMemory, setCurrentType, setRunning, disable
                 new_value: null,
             }
             setMemory(memory_initial_state);
+
+            // Get valid instructions
+            enableValidInstructions();
         });
     };
 

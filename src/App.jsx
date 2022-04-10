@@ -18,6 +18,12 @@ const types = {
   split: "Split Transaction",
 }
 
+const action_to_index = {
+  'Load': 0,
+  'Store': 1,
+  'Evict': 2,
+}
+
 function App() {
   const [currentSteps, setCurrentSteps] = useState([])
   const [processors, setProcessors] = useState([
@@ -53,6 +59,13 @@ function App() {
   const [tooltip_buttons, setTooltipButtons] = useState([[], [], [], [], []]);   // Arr of 5 elts [p0, p1, p2, mem, bus]
   const [currentType, setCurrentType] = useState(types.unspecified);   // Keep track of current type to know to disable correct buttons
   const [isRunning, setRunning] = useState(false);
+  const [disableProcAction, setDisableProcAction] = useState(
+    [
+      [true, true, true],
+      [true, true, true],
+      [true, true, true]
+    ]   
+  )
 
   const clearLines = () => {
     console.log(lines);
@@ -84,8 +97,9 @@ const executeProcessorAction = (proc_num, action, value=null) => {
     API.executeProcessorAction(body).then( res=> {
       setCurrentSteps(res);
 
-      // If doing split transaction then update bus as well
+      // Update bus as well
       API.getBusEvents().then( busEvents => {setBusInstructions(busEvents)});
+      enableValidInstructions();
     })
   }
 
@@ -128,7 +142,27 @@ const executeProcessorAction = (proc_num, action, value=null) => {
 
       console.log('Get bus event');
       API.getBusEvents().then( busEvents => {setBusInstructions(busEvents)});
+      enableValidInstructions();
     });    
+  }
+
+  const enableValidInstructions = () => {
+    API.getValidInstructions().then(res => {
+      let newDisableProcAction = [
+        [true, true, true],
+        [true, true, true],
+        [true, true, true]
+      ];
+
+      res.forEach(proc => {
+        proc['actions'].forEach(action => {
+          newDisableProcAction[proc['processor']][action_to_index[action]] = false;
+        })
+      })
+
+      console.log(newDisableProcAction);
+      setDisableProcAction(newDisableProcAction);
+    });
   }
 
   return (
@@ -146,6 +180,7 @@ const executeProcessorAction = (proc_num, action, value=null) => {
             setMemory={setMemory}
             setCurrentType={setCurrentType}
             setRunning={setRunning}
+            enableValidInstructions={enableValidInstructions}
             disableGetInitialState={isRunning}
           />
           <Instructions
@@ -155,6 +190,8 @@ const executeProcessorAction = (proc_num, action, value=null) => {
             disableStepButton={currentSteps.length === 0}  // Disable step button if no more steps for current action
             hideStepButton={currentType !== types.atomic}  // Only show step button if in atomic mode
             disableProcButtons={!isRunning || (currentType !== types.split && currentSteps.length !== 0)}
+            disableProcAction={disableProcAction}
+            setDisableProcAction={setDisableProcAction}
           />
         </div>
         <div className='pl-4 w-1/2 xl:w-3/5 min-w-fit'>
