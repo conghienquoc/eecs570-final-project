@@ -6,11 +6,12 @@ const styles = {
         'px-3', 'py-1',
         'rounded-lg',
         'text-medium-grey',
-        'flex-1'
+        'flex-1',
+        'hover:bg-offwhite'
     ].join(' '),
     active_switch: [
         '',
-        'bg-white',
+        '!bg-white',
         '!text-offblack'
     ].join(' '),
 };
