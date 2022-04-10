@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useAlert } from 'react-alert'
 import Processor from "./Processor";
 import Bus from "./Bus";
 import MainMemory from "./MainMemory";
@@ -59,7 +60,8 @@ const Simulation = (
     
     // var lines = []
     let existing_edges = [] // Keep track of pairs of endpoints to handle overlapping
-    // const [existing_edges, setExistingEdges] = useState([]);    
+    // const [existing_edges, setExistingEdges] = useState([]);
+    const alert = useAlert();
 
     const showLine = (line) => {
         if (line === null) return;
@@ -261,7 +263,7 @@ const Simulation = (
                 dst = src;
             }
             else if (step['action'] === actions.hit) {
-                alert("Cache hit!");
+                alert.show(`Cache hit on processor ${step['target'] + 1}!`);
                 return;
             }
             else {

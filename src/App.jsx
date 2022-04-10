@@ -18,7 +18,6 @@ const types = {
   split: "Split Transaction",
 }
 
-
 function App() {
   const [currentSteps, setCurrentSteps] = useState([])
   const [processors, setProcessors] = useState([
