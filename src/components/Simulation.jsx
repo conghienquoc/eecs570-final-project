@@ -78,7 +78,7 @@ const Simulation = (
             {
                 dash: { animation: true },
                 hide: true,
-                middleLabel: label,
+                endLabel: LeaderLine.captionLabel(label),
                 endSocket: end_socket,
                 color: color,
             }
