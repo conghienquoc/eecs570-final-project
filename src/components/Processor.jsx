@@ -7,7 +7,7 @@ const Processor = ({id, cache}) => {
     const body = (
         <tr>
             <td>{ cache['state'] !== '' ?  cache['state'] : '—'}</td>
-            <td>{ cache['register'] !== '' ?  cache['register'] : '—'}</td>
+            {/* <td>{ cache['register'] !== '' ?  cache['register'] : '—'}</td> */}
             <td>{ cache['value'] !== '' ?  cache['value'] : '—'}</td>
         </tr>
     );
@@ -21,7 +21,7 @@ const Processor = ({id, cache}) => {
                 <thead className="bg-light-grey">
                     <tr>
                         <th>State</th>
-                        <th>Register</th>
+                        {/* <th>Register</th> */}
                         <th>Value</th>
                     </tr>
                 </thead>

@@ -6,7 +6,7 @@ const styles = {
 const MainMemory = ({cache}) => {
     const body = (
         <tr>
-            <td>{ cache['register'] !== '' ?  cache['register'] : '—'}</td>
+            {/* <td>{ cache['register'] !== '' ?  cache['register'] : '—'}</td> */}
             <td>{ cache['value'] !== '' ?  cache['value'] : '—'}</td>
         </tr>
     );
@@ -17,10 +17,9 @@ const MainMemory = ({cache}) => {
             <div className="rounded-lg px-3 py-1 border border-offblack text-center font-bold">
                 Main Memory
             </div>
-            <table className="rounded-table">
+            <table className="rounded-table-one-col">
                 <thead className="bg-light-grey">
                     <tr>
-                        <th>Register</th>
                         <th>Value</th>
                     </tr>
                 </thead>

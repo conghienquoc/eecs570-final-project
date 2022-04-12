@@ -189,19 +189,20 @@ const Simulation = (
         var new_memory = JSON.parse(JSON.stringify(memory));
 
         // Prevent value keep changing with multiple button clicks
-        if (memory.new_value !== memory.value && typeof(memory.value) == "number") {
-            new_memory.value = <span><del>{memory.value}</del> <strong className={`text-[${color}]`}>{memory.new_value}</strong></span>;
-        }
+        // if (memory.new_value !== memory.value && typeof(memory.value) == "number") {
+        //     new_memory.value = <span><del>{memory.value}</del> <strong className={`text-[${color}]`}>{memory.new_value}</strong></span>;
+        // }
 
         // Update value if new value changes
         if (memory.new_value && memory.new_value !== memory.value) {            
             // Prevent value keep changing with multiple button clicks
             if (typeof(memory.value) == "number") {
                 new_memory.value = <span><del>{memory.value}</del> <strong className={`text-[${color}]`}>{memory.new_value}</strong></span>;
+                setMemory(new_memory);
             }
         }
 
-        setMemory(new_memory);
+        
     }
 
 

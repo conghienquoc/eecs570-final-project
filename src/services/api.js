@@ -7,6 +7,7 @@ class API {
         const response = await http({
             method: 'GET',
             url: "get_initial_state",
+            params: paramObj,
         })
         console.log(response.data);
         return response.data;

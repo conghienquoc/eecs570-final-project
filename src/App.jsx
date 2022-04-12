@@ -127,8 +127,10 @@ const executeProcessorAction = (proc_num, action, value=null) => {
 
   const commitMemory = () => {
       var new_memory = JSON.parse(JSON.stringify(memory));
-      if (new_memory.new_state !== null) new_memory.state = new_memory.new_state;
-      new_memory.new_state = null;
+      console.log('new memory');
+      console.log(new_memory);
+      if (new_memory.new_value !== null) new_memory.value = new_memory.new_value;
+      new_memory.new_value = null;
       setMemory(new_memory);
   }
 
@@ -210,9 +212,16 @@ const executeProcessorAction = (proc_num, action, value=null) => {
             getNextStep={getNextStep}
           />
 
-          <div className='mt-10'>
-            <strong>For debugging purposes:</strong><br/> 
-            <pre>{JSON.stringify(processors, undefined, 2)}</pre>
+          <div className='mt-10 flex flex-row gap-x-10'>
+            <div>
+              <strong>Procs</strong><br/> 
+              <pre>{JSON.stringify(processors, undefined, 2)}</pre>
+            </div>
+            <div>
+              <strong>Memory</strong><br/> 
+              <pre>{JSON.stringify(memory, undefined, 2)}</pre>
+            </div>
+            
           </div>
         </div>
       </div>
