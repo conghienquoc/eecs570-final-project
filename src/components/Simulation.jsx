@@ -167,7 +167,7 @@ const Simulation = (
         var new_processors = processors.slice(0);
 
         // Update value if new value changes
-        if ((processors[proc_idx].new_value || processors[proc_idx].new_state === 'I') && processors[proc_idx].new_value !== processors[proc_idx].value) {            
+        if ((processors[proc_idx].new_value !== null || processors[proc_idx].new_state === 'I') && processors[proc_idx].new_value !== processors[proc_idx].value) {            
             // Prevent value keep changing with multiple button clicks
             if (typeof(new_processors[proc_idx].value) == "number" || new_processors[proc_idx].value === "") {
                 new_processors[proc_idx].value = <span><del>{new_processors[proc_idx].value}</del> <strong className={`text-[${color}]`}>{processors[proc_idx].new_value}</strong></span>;
@@ -194,7 +194,7 @@ const Simulation = (
         // }
 
         // Update value if new value changes
-        if (memory.new_value && memory.new_value !== memory.value) {            
+        if (memory.new_value !== null && memory.new_value !== memory.value) {            
             // Prevent value keep changing with multiple button clicks
             if (typeof(memory.value) == "number") {
                 new_memory.value = <span><del>{memory.value}</del> <strong className={`text-[${color}]`}>{memory.new_value}</strong></span>;
@@ -260,6 +260,9 @@ const Simulation = (
             let dst;
 
             if (step['action'] === actions.update) {
+                // For memory that's just updating the state, don't display
+                if (step['target'] === -1 && step["value"] === memory.value) return;
+                
                 src = step['target'];
                 dst = src;
             }

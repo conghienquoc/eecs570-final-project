@@ -7,7 +7,7 @@ import CoherencyState from "../utils/coherency-states";
 const protocols = {
     msi: 'MSI',
     mesi: 'MESI',
-    mosi: 'MOSI'
+    // mosi: 'MOSI'
 }
 
 // To send to backend API
@@ -16,15 +16,17 @@ const type_backend = {
     "Split Transaction": "split",
 };
 
-// To display on the frontend
-const type_display = {
-    atomic: "Atomic",
-    split: "Split Transaction",
-}
 
 const Settings = ({setProcessors, setMemory, setCurrentType, setRunning, disableGetInitialState, enableValidInstructions}) => {
     const [protocol, setProtocol] = useState(protocols.msi);
+
+    // To display on the frontend
+    const type_display = protocol === protocols.msi ? {
+        atomic: "Atomic",
+        split: "Split Transaction",
+    } : {atomic: "Atomic",};
     const [type, setType] = useState(type_display.atomic);
+
 
     const getInitialState = () => {
         setCurrentType("");     // Reset current type for app
