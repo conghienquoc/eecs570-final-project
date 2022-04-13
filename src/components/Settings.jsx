@@ -7,7 +7,7 @@ import CoherencyState from "../utils/coherency-states";
 const protocols = {
     msi: 'MSI',
     mesi: 'MESI',
-    // mosi: 'MOSI'
+    mosi: 'MOSI'
 }
 
 // To send to backend API
@@ -70,6 +70,8 @@ const Settings = ({setProcessors, setMemory, setCurrentType, setRunning, disable
 
     return (
         <div className="flex flex-col gap-y-2">
+            <h2 className="text-xl font-bold font-mono">Settings</h2>
+
             <div className="flex flex-col gap-y-2 items-stretch">
                 <Switch
                     options={Object.values(protocols)}

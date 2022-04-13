@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useAlert } from "react-alert";
 import API from '../services/api.js';
+import Modal from "./Modal.jsx";
 
 const styles = {
     button: [
@@ -12,7 +13,12 @@ const styles = {
     ].join(' '),
     proc_button: [
         'rounded-lg', 'p-2', 'bg-red', 'text-white',
-        'disabled:bg-light-grey', 'disabled:text-medium-grey'
+        'disabled:bg-light-grey', 'disabled:text-medium-grey', "w-full"
+    ].join(' '),
+    modal_button: [
+        'block',
+        'px-4', 'py-2',
+        'rounded-lg'
     ].join(' '),
 };
 
@@ -23,34 +29,63 @@ const Instructions = (
         disableProcAction, setDisableProcAction
     }
 ) => {
-    const [input1, setInput1] = useState("");
-    const [input2, setInput2] = useState("");
-    const [input3, setInput3] = useState("");
-    const alert = useAlert();
 
-    const handleTextInput1 = (e) => {
-        setInput1(e.target.value);
+    // Modal
+    const [showModal, setShowModal] = useState(false);
+    const [writeInput, setWriteInput] = useState("");
+    const [writeProc, setWriteProc] = useState(0);
+
+    const handleTextInput = (e) => {
+        setWriteInput(e.target.value);
     }
 
-    const handleTextInput2 = (e) => {
-        setInput2(e.target.value);
+    const toggleModal = () => {
+        setShowModal(!showModal);
     }
 
-    const handleTextInput3 = (e) => {
-        setInput3(e.target.value);
+    const handleWriteSubmit = () => {
+        // Warning if no input value
+        if (writeInput == "") {
+            alert.error("Write value not found.");
+            return;
+        }
+        
+        executeProcessorAction(writeProc, 'Store', parseInt(writeInput));
+        toggleModal();
     }
+
+    const modalBody = 
+        <div>
+            <div className="flex flex-row gap-x-4 items-center">
+                <label htmlFor="writeInput" className={'block font-semibold'}>Write value</label>
+                <input id="writeInput" name="writeInput" className={'block border border-light-grey rounded-lg px-3 py-1'}
+                    type="text" value={writeInput} size='10' onChange={handleTextInput}/>
+            </div>            
+            
+            <div className='flex flex-row mt-10 gap-x-3 justify-end	'>
+                <button onClick={handleWriteSubmit} className={styles.modal_button + ' bg-hyperlink-blue text-white hover:bg-hyperlink-blue2 active:bg-hyperlink-blue active:text-white'}>Submit</button>
+                <button onClick={toggleModal} className={styles.modal_button + ' bg-offwhite text-medium-grey hover:bg-light-grey hover:text-offblack active:bg-offwhite active:text-medium-grey'}>Cancel</button>
+            </div>
+        </div>;
+
+    const modalContent = {
+        title: `Write to Processor ${writeProc + 1}`,
+        body: modalBody,
+    };
+
+    // Endof Modal
 
     // Clear inputs everytime we get next steps
     useEffect(() => {
-        setInput1("");
-        setInput2("");
-        setInput3("");
+        setWriteInput("");
     }, [currentSteps])
 
     return (
         <div>
+            <Modal showModal={showModal} toggleModal={toggleModal} content={modalContent}/>
+
             <div className="flex flex-row justify-between">
-                <h2 className="text-lg font-bold">Instructions</h2>
+                <h2 className="text-xl font-bold font-mono">Instructions</h2>
 
                 {/* // Only show step button if in atomic mode */}
                 <div className={"flex flex-row gap-x-2 " + (hideStepButton ? "hidden" : "")}>
@@ -67,25 +102,15 @@ const Instructions = (
                 >
                     Read Processor 1
                 </button>
-                <div className="flex flex-col">
+                <div className="flex flex-col justify-center items-center">
                     <button disabled={disableProcButtons || disableProcAction[0][1]} className={styles.proc_button}
                         onClick={() => {
-                            // Warning if no input value
-                            if (input1 == "") {
-                                alert.error("Write value not found.");
-                                return;
-                            }
-                            executeProcessorAction(0, 'Store', parseInt(input1));
+                            setWriteProc(0);
+                            toggleModal();
                         }}
                     >
                         Write Processor 1
                     </button>
-                    <div className="mt-1">
-                        Value:
-                        <input className="ml-2 text-offblack border border-offblack rounded-md" size = "5" value={input1}
-                            onChange={handleTextInput1}
-                        />
-                    </div>
                     
                 </div>
                 
@@ -99,25 +124,15 @@ const Instructions = (
                 >
                     Read Processor 2
                 </button>
-                <div className="flex flex-col">
+                <div className="flex flex-col justify-center items-center">
                     <button disabled={disableProcButtons || disableProcAction[1][1]} className={styles.proc_button}
                         onClick={() => {
-                            // Warning if no input value
-                            if (input2 == "") {
-                                alert.error("Write value not found.");
-                                return;
-                            }
-                            executeProcessorAction(1, 'Store', parseInt(input2));
+                            setWriteProc(1);
+                            toggleModal();
                         }}
                     >
                         Write Processor 2
                     </button>
-                    <div className="mt-1">
-                        Value:
-                        <input className="ml-2 text-offblack border border-offblack rounded-md" size = "5" value={input2}
-                            onChange={handleTextInput2}
-                        />
-                    </div>
                 </div>
                 <button disabled={disableProcButtons || disableProcAction[1][2]} className={styles.proc_button}
                     onClick={() => executeProcessorAction(1, 'Evict')}
@@ -129,25 +144,15 @@ const Instructions = (
                 >
                     Read Processor 3
                 </button>
-                <div className="flex flex-col">
+                <div className="flex flex-col justify-center items-center">
                     <button disabled={disableProcButtons || disableProcAction[2][1]} className={styles.proc_button}
                         onClick={() => {
-                            // Warning if no input value
-                            if (input3 == "") {
-                                alert.error("Write value not found.");
-                                return;
-                            }
-                            executeProcessorAction(2, 'Store', parseInt(input3));
+                            setWriteProc(2);
+                            toggleModal();
                         }}
                     >
                         Write Processor 3
-                    </button>
-                    <div className="mt-1">
-                        Value:
-                        <input className="ml-2 text-offblack border border-offblack rounded-md" size = "5" value={input3}
-                            onChange={handleTextInput3}
-                        />
-                    </div>                    
+                    </button>               
                 </div>
                 <button disabled={disableProcButtons || disableProcAction[2][2]} className={styles.proc_button}
                     onClick={() => executeProcessorAction(2, 'Evict')}

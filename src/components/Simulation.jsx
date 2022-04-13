@@ -315,7 +315,7 @@ const Simulation = (
                 {memory_div}          
             </div>
 
-            <div className="mt-10 flex flex-col justify-center ml-28 items-center gap-y-2">
+            <div className="mt-10 flex flex-col justify-center items-center gap-y-2 ml-12">
                 <h2 className="text-lg font-bold">Bus instructions to be executed</h2>
                 {bus_instruction_buttons}
             </div>

@@ -6,6 +6,8 @@ import Instructions from './components/Instructions';
 import Simulation from './components/Simulation';
 import API from './services/api';
 
+const debug = false;  // Print out procs and mem states/val
+
 const coherency_states = {
   'Invalid': 'I',
   'Shared': 'S',
@@ -168,15 +170,21 @@ const executeProcessorAction = (proc_num, action, value=null) => {
   }
 
   return (
-    <div className='w-full min-h-screen px-16 py-10'>
+    <div className='w-full min-h-screen px-20 py-16'>
       <Helmet>
         <title>Cache Coherency Simulator</title>
       </Helmet>
+      
 
-      <h1 className='text-3xl font-bold mb-10'>Cache Coherency Simulator</h1>
-
-      <div className='flex flex-row'>
-        <div className='flex flex-col pr-4 w-1/2 xl:w-2/5 gap-y-8'>
+      <div className='flex flex-col lg:flex-row gap-x-4 lg:gap-x-10'>
+        <div className='flex flex-col pr-4 w-full lg:w-1/3 gap-y-8'>
+          <div>
+            <h1 className='text-4xl font-bold font-mono mb-5'>Cache Coherency Simulator</h1>
+            <p> The simulator replicates a multiprocessor snooping-based system under various cache coherency protocols
+                — MSI (with the option for split-transaction), MESI, MOSI. Each processor and the main memory have an L1 cache of size 1,
+                interacting with one another through bus transactions.
+            </p>
+          </div>
           <Settings
             setProcessors={setProcessors}
             setMemory={setMemory}
@@ -196,23 +204,25 @@ const executeProcessorAction = (proc_num, action, value=null) => {
             setDisableProcAction={setDisableProcAction}
           />
         </div>
-        <div className='pl-4 w-1/2 xl:w-3/5 min-w-fit'>
-          <Simulation
-            current_steps={currentSteps}
-            processors={processors}
-            memory={memory}
-            setProcessors={setProcessors}
-            setMemory={setMemory}
-            bus_instructions={bus_instructions}
-            setBusInstructions={setBusInstructions}
-            lines={lines}
-            tooltip_buttons={tooltip_buttons}
-            setTooltipButtons={setTooltipButtons}
-            disableBusButtons={currentType !== types.split}   // Only allow bus buttons to be clicked in split transaction mode
-            getNextStep={getNextStep}
-          />
+        <div className='flex mt-16 pl-4 w-full lg:w-2/3 min-w-fit justify-between'>
+          <div className='w-full'>
+            <Simulation
+              current_steps={currentSteps}
+              processors={processors}
+              memory={memory}
+              setProcessors={setProcessors}
+              setMemory={setMemory}
+              bus_instructions={bus_instructions}
+              setBusInstructions={setBusInstructions}
+              lines={lines}
+              tooltip_buttons={tooltip_buttons}
+              setTooltipButtons={setTooltipButtons}
+              disableBusButtons={currentType !== types.split}   // Only allow bus buttons to be clicked in split transaction mode
+              getNextStep={getNextStep}
+            />
+          </div>          
 
-          <div className='mt-10 flex flex-row gap-x-10'>
+          <div className={'mt-10 flex flex-row gap-x-10 ' + (debug ? '' : 'hidden')}>
             <div>
               <strong>Procs</strong><br/> 
               <pre>{JSON.stringify(processors, undefined, 2)}</pre>
