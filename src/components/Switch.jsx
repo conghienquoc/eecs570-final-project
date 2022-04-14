@@ -1,6 +1,5 @@
 import React from "react";
 
-
 const styles = {
     switch: [
         'px-3', 'py-1',
@@ -24,7 +23,7 @@ const Switch = ({options, active, toggleFunc}) => {
         return (
             <button key={i} className={styles.switch + (isActive ? styles.active_switch : '')}
             onClick={() => toggleFunc(option)}>
-                {option}
+                {option}             
             </button>
         )
     })

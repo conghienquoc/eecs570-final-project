@@ -170,17 +170,17 @@ const executeProcessorAction = (proc_num, action, value=null) => {
   }
 
   return (
-    <div className='w-full min-h-screen px-20 py-16'>
+    <div id="page-wrapper" className='w-full min-h-screen px-20 py-16'>
       <Helmet>
         <title>Cache Coherency Simulator</title>
       </Helmet>
       
 
-      <div className='flex flex-col lg:flex-row gap-x-4 lg:gap-x-10'>
-        <div className='flex flex-col pr-4 w-full lg:w-1/3 gap-y-8'>
+      <div className='flex flex-col xl:flex-row gap-x-4 lg:gap-x-10'>
+        <div className='flex flex-col pr-4 w-full xl:w-1/3 gap-y-8'>
           <div>
             <h1 className='text-4xl font-bold font-mono mb-5'>Cache Coherency Simulator</h1>
-            <p> The simulator replicates a multiprocessor snooping-based system under various cache coherency protocols
+            <p className='text-base xl:text-sm'> The simulator replicates a multiprocessor snooping-based system under various cache coherency protocols
                 — MSI (with the option for split-transaction), MESI, MOSI. Each processor and the main memory have an L1 cache of size 1,
                 interacting with one another through bus transactions.
             </p>
@@ -204,7 +204,7 @@ const executeProcessorAction = (proc_num, action, value=null) => {
             setDisableProcAction={setDisableProcAction}
           />
         </div>
-        <div className='flex mt-16 pl-4 w-full lg:w-2/3 min-w-fit justify-between'>
+        <div className='flex mt-16 pl-4 w-full xl:w-2/3 min-w-fit justify-between'>
           <div className='w-full'>
             <Simulation
               current_steps={currentSteps}

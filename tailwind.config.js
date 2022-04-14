@@ -16,6 +16,8 @@ module.exports = {
         'green': "#00C853",
         'hyperlink-blue': '#008BF8',
         'hyperlink-blue2': '#007ddf',
+        'primary-dark': '#241d3f',
+        'primary-darker': '#211833'
       },
     },
   },

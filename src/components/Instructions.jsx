@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useAlert } from "react-alert";
 import API from '../services/api.js';
 import Modal from "./Modal.jsx";
+import HelpButton from "./HelpButton.jsx";
+import const_styles from "../constants/const_styles.jsx";
 
 const styles = {
     button: [
@@ -14,11 +16,6 @@ const styles = {
     proc_button: [
         'rounded-lg', 'p-2', 'bg-red', 'text-white',
         'disabled:bg-light-grey', 'disabled:text-medium-grey', "w-full"
-    ].join(' '),
-    modal_button: [
-        'block',
-        'px-4', 'py-2',
-        'rounded-lg'
     ].join(' '),
 };
 
@@ -63,8 +60,8 @@ const Instructions = (
             </div>            
             
             <div className='flex flex-row mt-10 gap-x-3 justify-end	'>
-                <button onClick={handleWriteSubmit} className={styles.modal_button + ' bg-hyperlink-blue text-white hover:bg-hyperlink-blue2 active:bg-hyperlink-blue active:text-white'}>Submit</button>
-                <button onClick={toggleModal} className={styles.modal_button + ' bg-offwhite text-medium-grey hover:bg-light-grey hover:text-offblack active:bg-offwhite active:text-medium-grey'}>Cancel</button>
+                <button onClick={handleWriteSubmit} className={const_styles.modal_button + ' bg-hyperlink-blue text-white hover:bg-hyperlink-blue2 active:bg-hyperlink-blue active:text-white'}>Submit</button>
+                <button onClick={toggleModal} className={const_styles.modal_button + ' bg-offwhite text-medium-grey hover:bg-light-grey hover:text-offblack active:bg-offwhite active:text-medium-grey'}>Cancel</button>
             </div>
         </div>;
 
@@ -85,7 +82,9 @@ const Instructions = (
             <Modal showModal={showModal} toggleModal={toggleModal} content={modalContent}/>
 
             <div className="flex flex-row justify-between">
-                <h2 className="text-xl font-bold font-mono">Instructions</h2>
+                <div className="flex flex-row gap-x-4">
+                    <h2 className="text-2xl font-bold font-mono">Instructions</h2>
+                </div>   
 
                 {/* // Only show step button if in atomic mode */}
                 <div className={"flex flex-row gap-x-2 " + (hideStepButton ? "hidden" : "")}>

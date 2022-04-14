@@ -12,7 +12,7 @@ const styles = {
     ].join(' '),
     modal: [
         'flex', 'flex-col',
-        'z-[52]', 'w-[500px]',
+        'z-[52]',
         'rounded-xl',
         'bg-white'      
     ].join(' '),
@@ -28,8 +28,14 @@ const styles = {
     ].join(' '),
 };
 
+const modal_width = {
+    sm: 'w-[400px]',
+    md: 'w-[500px]',
+    lg: 'w-[700px]',
+};
 
-const Modal = ({showModal, toggleModal, content}) => {
+
+const Modal = ({showModal, toggleModal, content, size='sm'}) => {
     const animation = useSpring({
         config: {
           duration: 250
@@ -43,7 +49,7 @@ const Modal = ({showModal, toggleModal, content}) => {
         <div className={styles.pageWrapper + (showModal ? '' : ' hidden')}>
             <div onClick={toggleModal} className={styles.background}>
             </div>
-            <animated.div className={styles.modal} style={animation}>
+            <animated.div className={styles.modal + ' ' + modal_width[size]} style={animation}>
                 <div className={styles.modalHeader}>
                     <h1 className={`font-bold text-xl`}>{content.title}</h1>
                     <button onClick={toggleModal} className={`text-medium-grey hover:text-offblack`}>&#10006;</button>
