@@ -14,7 +14,7 @@ const MainMemory = ({cache}) => {
 
     return (
         <div id="Memory" className="flex flex-col gap-y-4">
-            <div className="w-fit h-fit rounded-lg px-4 py-2 font-monospace font-bold text-lg bg-gradient-to-r from-blue to-purple">
+            <div className="w-fit h-fit rounded-lg px-4 py-2 font-monospace font-bold text-lg border border-mint text-mint">
                 Main Memory
             </div>
             <table className="rounded-table-one-col text-lg font-monospace">

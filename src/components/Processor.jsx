@@ -14,7 +14,7 @@ const Processor = ({id, cache}) => {
 
     return (
         <div id={'P' + id} className="flex flex-row gap-x-4">
-            <div className="w-fit h-fit rounded-lg px-4 py-2 font-monospace font-bold text-lg bg-gradient-to-r from-blue to-purple">
+            <div className="w-fit h-fit rounded-lg px-4 py-2 font-monospace font-bold text-lg border border-mint text-mint">
                 P{id}
             </div>
             <table className="rounded-table text-lg font-monospace">
