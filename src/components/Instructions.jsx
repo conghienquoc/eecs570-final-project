@@ -7,15 +7,16 @@ import const_styles from "../constants/const_styles.jsx";
 
 const styles = {
     button: [
-        'px-3', 'py-1',
-        'rounded-lg',
+        'px-4', 'py-2',
+        'rounded-full',
         'text-white',
-        'disabled:bg-light-grey',
-        'disabled:text-medium-grey'
+        'font-medium'
     ].join(' '),
     proc_button: [
-        'rounded-lg', 'p-2', 'bg-red', 'text-white',
-        'disabled:bg-light-grey', 'disabled:text-medium-grey', "w-full"
+        'rounded-lg', 'p-2', 'text-white', "w-full",
+        'bg-mint-2', 'hover:bg-mint-3'
+        // 'bg-gradient-to-l', 'from-blue', 'to-mint',
+        // 'hover:from-[#3063c8] hover:to-[#13d28f]'
     ].join(' '),
 };
 
@@ -55,13 +56,13 @@ const Instructions = (
         <div>
             <div className="flex flex-row gap-x-4 items-center">
                 <label htmlFor="writeInput" className={'block font-semibold'}>Write value</label>
-                <input id="writeInput" name="writeInput" className={'block border border-light-grey rounded-lg px-3 py-1'}
+                <input id="writeInput" name="writeInput" className={'block border border-medium-grey bg-transparent rounded-lg px-3 py-1 active:border-light-grey'}
                     type="text" value={writeInput} size='10' onChange={handleTextInput}/>
             </div>            
             
             <div className='flex flex-row mt-10 gap-x-3 justify-end	'>
-                <button onClick={handleWriteSubmit} className={const_styles.modal_button + ' bg-hyperlink-blue text-white hover:bg-hyperlink-blue2 active:bg-hyperlink-blue active:text-white'}>Submit</button>
-                <button onClick={toggleModal} className={const_styles.modal_button + ' bg-offwhite text-medium-grey hover:bg-light-grey hover:text-offblack active:bg-offwhite active:text-medium-grey'}>Cancel</button>
+                <button onClick={handleWriteSubmit} className={const_styles.modal_button + ' bg-green text-white font-medium hover:bg-light-green'}>Submit</button>
+                <button onClick={toggleModal} className={const_styles.modal_button + ' bg-[#312e5c] text-medium-grey hover:bg-[#3f3b76]'}>Cancel</button>
             </div>
         </div>;
 
@@ -87,8 +88,8 @@ const Instructions = (
                 </div>   
 
                 {/* // Only show step button if in atomic mode */}
-                <div className={"flex flex-row gap-x-2 " + (hideStepButton ? "hidden" : "")}>
-                    <button disabled={disableStepButton} className={styles.button + ' bg-green text-white'}
+                <div className={"flex flex-row gap-x-2 " + (hideStepButton ? "invisible" : "")}>
+                    <button disabled={disableStepButton} className={styles.button + " " + const_styles.disabled_button + ' bg-green text-white hover:bg-light-green'}
                         onClick={() => getNextStep()}
                     >
                         Step &gt;
@@ -96,67 +97,60 @@ const Instructions = (
                 </div>
             </div>
             <div className="mt-4 grid grid-cols-3 gap-4">
-                <button disabled={disableProcButtons || disableProcAction[0][0]} className={styles.proc_button}
+                <button disabled={disableProcButtons || disableProcAction[0][0]} className={const_styles.proc_button + " " + const_styles.disabled_button}
                     onClick={() => executeProcessorAction(0, 'Load')}
                 >
-                    Read Processor 1
+                    Read P1
                 </button>
-                <div className="flex flex-col justify-center items-center">
-                    <button disabled={disableProcButtons || disableProcAction[0][1]} className={styles.proc_button}
-                        onClick={() => {
-                            setWriteProc(0);
-                            toggleModal();
-                        }}
-                    >
-                        Write Processor 1
-                    </button>
-                    
-                </div>
+                <button disabled={disableProcButtons || disableProcAction[0][1]} className={const_styles.proc_button + " " + const_styles.disabled_button}
+                    onClick={() => {
+                        setWriteProc(0);
+                        toggleModal();
+                    }}
+                >
+                    Write P1
+                </button>
                 
-                <button disabled={disableProcButtons || disableProcAction[0][2]} className={styles.proc_button}
+                <button disabled={disableProcButtons || disableProcAction[0][2]} className={const_styles.proc_button + " " + const_styles.disabled_button}
                     onClick={() => executeProcessorAction(0, 'Evict')}
                 >
-                    Evict Processor 1
+                    Evict P1
                 </button>
-                <button disabled={disableProcButtons || disableProcAction[1][0]} className={styles.proc_button}
+                <button disabled={disableProcButtons || disableProcAction[1][0]} className={const_styles.proc_button + " " + const_styles.disabled_button}
                     onClick={() => executeProcessorAction(1, 'Load')}
                 >
-                    Read Processor 2
+                    Read P2
                 </button>
-                <div className="flex flex-col justify-center items-center">
-                    <button disabled={disableProcButtons || disableProcAction[1][1]} className={styles.proc_button}
-                        onClick={() => {
-                            setWriteProc(1);
-                            toggleModal();
-                        }}
-                    >
-                        Write Processor 2
-                    </button>
-                </div>
-                <button disabled={disableProcButtons || disableProcAction[1][2]} className={styles.proc_button}
+                <button disabled={disableProcButtons || disableProcAction[1][1]} className={const_styles.proc_button + " " + const_styles.disabled_button}
+                    onClick={() => {
+                        setWriteProc(1);
+                        toggleModal();
+                    }}
+                >
+                    Write P2
+                </button>
+                <button disabled={disableProcButtons || disableProcAction[1][2]} className={const_styles.proc_button + " " + const_styles.disabled_button}
                     onClick={() => executeProcessorAction(1, 'Evict')}
                 >
-                    Evict Processor 2
+                    Evict P2
                 </button>  
-                <button disabled={disableProcButtons || disableProcAction[2][0]} className={styles.proc_button}
+                <button disabled={disableProcButtons || disableProcAction[2][0]} className={const_styles.proc_button + " " + const_styles.disabled_button}
                     onClick={() => executeProcessorAction(2, 'Load')}
                 >
-                    Read Processor 3
+                    Read P3
                 </button>
-                <div className="flex flex-col justify-center items-center">
-                    <button disabled={disableProcButtons || disableProcAction[2][1]} className={styles.proc_button}
-                        onClick={() => {
-                            setWriteProc(2);
-                            toggleModal();
-                        }}
-                    >
-                        Write Processor 3
-                    </button>               
-                </div>
-                <button disabled={disableProcButtons || disableProcAction[2][2]} className={styles.proc_button}
+                <button disabled={disableProcButtons || disableProcAction[2][1]} className={const_styles.proc_button + " " + const_styles.disabled_button}
+                    onClick={() => {
+                        setWriteProc(2);
+                        toggleModal();
+                    }}
+                >
+                    Write P3
+                </button>     
+                <button disabled={disableProcButtons || disableProcAction[2][2]} className={const_styles.proc_button + " " + const_styles.disabled_button}
                     onClick={() => executeProcessorAction(2, 'Evict')}
                 >
-                    Evict Processor 3
+                    Evict P3
                 </button>              
             </div>
         </div>

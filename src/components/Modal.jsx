@@ -8,22 +8,23 @@ const styles = {
         'flex', 'items-center', 'justify-center'
     ].join(' '),
     background: [
-        'bg-[#161b24]/[.8]', 'h-full w-full', 'fixed'
+        'bg-[#090313]/[.5]', 'h-full w-full', 'fixed'
     ].join(' '),
     modal: [
         'flex', 'flex-col',
         'z-[52]',
         'rounded-xl',
-        'bg-white'      
+        'bg-[#232142]', 'backdrop-blur-sm', 'drop-shadow-lg',
     ].join(' '),
     modalHeader: [
         'flex', 'flex-row', 'justify-between', 'items-center',
         'min-h-[50px]',
-        'py-5', 'px-10',
-        'border-b-2', 'border-light-grey'
+        'pb-5', 'pt-8', 'px-10',
+        'border-b-[1.5px]', 'border-medium-grey',
+        'text-white', 'text-xl',
     ].join(' '),
     modalBody: [
-        'py-5', 'px-10',
+        'py-8', 'px-10',
         'text-lg'
     ].join(' '),
 };
@@ -51,8 +52,8 @@ const Modal = ({showModal, toggleModal, content, size='sm'}) => {
             </div>
             <animated.div className={styles.modal + ' ' + modal_width[size]} style={animation}>
                 <div className={styles.modalHeader}>
-                    <h1 className={`font-bold text-xl`}>{content.title}</h1>
-                    <button onClick={toggleModal} className={`text-medium-grey hover:text-offblack`}>&#10006;</button>
+                    <h1 className={`font-monospace font-bold text-xl`}>{content.title}</h1>
+                    <button onClick={toggleModal} className={`text-medium-grey hover:text-light-grey`}>&#10006;</button>
                 </div>
                 <div className={styles.modalBody}>
                     {content.body}

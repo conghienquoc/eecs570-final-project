@@ -13,12 +13,12 @@ const MainMemory = ({cache}) => {
 
 
     return (
-        <div id="Memory" className="flex flex-col gap-y-2">
-            <div className="rounded-lg px-3 py-1 border border-offblack text-center font-bold">
+        <div id="Memory" className="flex flex-col gap-y-4">
+            <div className="w-fit h-fit rounded-lg px-4 py-2 font-monospace font-bold text-lg bg-gradient-to-r from-blue to-purple">
                 Main Memory
             </div>
-            <table className="rounded-table-one-col">
-                <thead className="bg-light-grey">
+            <table className="rounded-table-one-col text-lg font-monospace">
+                <thead className="font-bold">
                     <tr>
                         <th>Value</th>
                     </tr>

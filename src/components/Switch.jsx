@@ -3,15 +3,16 @@ import React from "react";
 const styles = {
     switch: [
         'px-3', 'py-1',
-        'rounded-lg',
+        'rounded-full',
         'text-medium-grey',
         'flex-1',
-        'hover:bg-offwhite'
+        'hover:bg-white/[.08]',
     ].join(' '),
     active_switch: [
         '',
-        '!bg-white',
-        '!text-offblack'
+        '!text-dark-grey',
+        '!font-semibold',
+        "!bg-primary-light",
     ].join(' '),
 };
 
@@ -29,7 +30,7 @@ const Switch = ({options, active, toggleFunc}) => {
     })
 
     return (
-        <div className="flex flex-row items-stretch gap-x-2 rounded-xl bg-light-grey px-3 py-2">
+        <div className="flex flex-row items-stretch gap-x-2 rounded-full bg-white/[0.12] px-3 py-2 drop-shadow-lg backdrop-blur-sm">
             {switches}
         </div>
     )

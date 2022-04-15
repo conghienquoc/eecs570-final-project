@@ -177,11 +177,13 @@ const executeProcessorAction = (proc_num, action, value=null) => {
       
 
       <div className='flex flex-col xl:flex-row gap-x-4 lg:gap-x-10'>
-        <div className='flex flex-col pr-4 w-full xl:w-1/3 gap-y-8'>
+        <div className='flex flex-col pr-4 w-full xl:w-1/3 gap-y-12'>
           <div>
-            <h1 className='text-4xl font-bold font-mono mb-5'>Cache Coherency Simulator</h1>
-            <p className='text-base xl:text-sm'> The simulator replicates a multiprocessor snooping-based system under various cache coherency protocols
-                — MSI (with the option for split-transaction), MESI, MOSI. Each processor and the main memory have an L1 cache of size 1,
+            <h1 className='text-5xl font-bold font-monospace mb-10 text-white'>
+              <span className='text-transparent bg-clip-text bg-gradient-to-r from-[#12dbaf] to-[#b2db57]'>Cache Coherency</span> Simulator
+            </h1>
+            <p className='text-base'> The simulator replicates a multiprocessor snooping-based system under various cache coherency protocols
+                — MSI (with the option for split-transaction), MESI, MOSI, and MOESI. Each processor and the main memory have an L1 cache of size 1,
                 interacting with one another through bus transactions.
             </p>
           </div>
@@ -193,18 +195,21 @@ const executeProcessorAction = (proc_num, action, value=null) => {
             enableValidInstructions={enableValidInstructions}
             disableGetInitialState={isRunning}
           />
-          <Instructions
-            currentSteps={currentSteps}
-            executeProcessorAction={executeProcessorAction}
-            getNextStep={getNextStep}
-            disableStepButton={currentSteps.length === 0}  // Disable step button if no more steps for current action
-            hideStepButton={currentType !== types.atomic}  // Only show step button if in atomic mode
-            disableProcButtons={!isRunning || (currentType !== types.split && currentSteps.length !== 0)}
-            disableProcAction={disableProcAction}
-            setDisableProcAction={setDisableProcAction}
-          />
+          <div className={isRunning ? '' : 'hidden'}>
+            <Instructions
+              currentSteps={currentSteps}
+              executeProcessorAction={executeProcessorAction}
+              getNextStep={getNextStep}
+              disableStepButton={currentSteps.length === 0}  // Disable step button if no more steps for current action
+              hideStepButton={currentType !== types.atomic}  // Only show step button if in atomic mode
+              disableProcButtons={!isRunning || (currentType !== types.split && currentSteps.length !== 0)}
+              disableProcAction={disableProcAction}
+              setDisableProcAction={setDisableProcAction}
+            />
+          </div> 
+          
         </div>
-        <div className='flex mt-16 pl-4 w-full xl:w-2/3 min-w-fit justify-between'>
+        <div className={'flex mt-16 pl-4 w-full xl:w-2/3 min-w-fit justify-between ' + (isRunning ? '' : 'invisible')}>
           <div className='w-full'>
             <Simulation
               current_steps={currentSteps}

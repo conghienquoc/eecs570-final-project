@@ -6,6 +6,7 @@ import MainMemory from "./MainMemory";
 import LeaderLine from "react-leader-line";
 import API from "../services/api";
 import CoherencyState from "../utils/coherency-states";
+import const_styles from "../constants/const_styles";
 
 const styles = {
 };
@@ -41,11 +42,11 @@ const num_to_index = {
 }
 
 const colors = [
-    "#F45B69",
-    "#59C3C3",
-    "#FF9505",
-    "#548C2F",
-    "#4062BB",
+    "#00c75f",
+    "#8980F5",
+    "#0892A5",
+    "#55286F",      
+    "#F25757",
 ]
 
 
@@ -76,9 +77,14 @@ const Simulation = (
             document.getElementById(src_id),
             document.getElementById(dst_id),
             {
-                dash: { animation: true },
+                // dash: { animation: true },
                 hide: true,
-                endLabel: LeaderLine.captionLabel(label),
+                endLabel: LeaderLine.captionLabel(label, {
+                    'fontFamily': 'Space Mono',
+                    'outlineColor': '',
+                    'fontWeight': '700',
+                    'fontSize': '1.125rem'
+                }),
                 endSocket: end_socket,
                 color: color,
             }
@@ -89,7 +95,7 @@ const Simulation = (
         const bg_color = `bg-[${color}]`;
         return (
             <button
-                className={"rounded-full border w-[30px] h-[30px] text-white " + bg_color}
+                className={"rounded-full w-[30px] h-[30px] text-white z-50 " + bg_color}
                 onClick={handleClick}>
                     {i + 1 /* Because of 0-index*/} 
             </button>
@@ -214,7 +220,7 @@ const Simulation = (
         <div key={'P' + (i+1)} id={'P' + (i+1) + '-wrapper'} className="relative">
             <Processor id={i+1} cache={p}/>
 
-            <div className="absolute flex flex-col top-0 right-[-2.5rem] gap-1">
+            <div className="absolute flex flex-col top-0 right-[-3rem] gap-1">
                 {create_step_buttons(i)}
             </div>            
         </div>
@@ -244,7 +250,7 @@ const Simulation = (
 
     // Only allow bus buttons to be clicked in split transaction mode
     const bus_instruction_buttons = bus_instructions.map((instruction, i) => 
-        <button className="rounded-lg px-6 py-3 bg-red text-white disabled:bg-light-grey disabled:text-medium-grey" disabled={disableBusButtons}
+        <button className={const_styles.proc_button + " " + const_styles.disabled_button} disabled={disableBusButtons}
             onClick={() => getNextStep(i)}
         >
             {instruction.action} from {num_to_id[instruction.src.toString()]}
@@ -303,8 +309,8 @@ const Simulation = (
     return (
         <div>
             <div className="flex flex-row gap-x-28 items-center justify-between">
-                <span className="bg-[#F45B69] bg-[#59C3C3] bg-[#FF9505] bg-[#4062BB] bg-[#548C2F]
-                                text-[#F45B69] text-[#59C3C3] text-[#FF9505] text-[#4062BB] text-[#548C2F] hidden"></span>
+                <span className="bg-[#00c75f] bg-[#8980F5] bg-[#F25757] bg-[#0892A5] bg-[#55286F]
+                                text-[#00c75f] text-[#8980F5] text-[#F25757] text-[#0892A5] text-[#55286F] hidden"></span>
                 <div className="flex flex-col gap-y-16">
                     {processor_divs}
 
@@ -315,8 +321,8 @@ const Simulation = (
                 {memory_div}          
             </div>
 
-            <div className="mt-10 flex flex-col justify-center items-center gap-y-2 ml-12">
-                <h2 className="text-lg font-bold">Bus instructions to be executed</h2>
+            <div className="mt-10 flex flex-col justify-center items-center gap-y-2 ml-20">
+                <h2 className="text-lg text-primary-light">Waiting Bus Instructions</h2>
                 {bus_instruction_buttons}
             </div>
             

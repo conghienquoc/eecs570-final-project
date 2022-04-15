@@ -13,12 +13,12 @@ const Processor = ({id, cache}) => {
     );
 
     return (
-        <div id={'P' + id} className="flex flex-row gap-x-2">
-            <div className="w-fit h-fit rounded-lg px-3 py-1 border border-offblack font-bold">
+        <div id={'P' + id} className="flex flex-row gap-x-4">
+            <div className="w-fit h-fit rounded-lg px-4 py-2 font-monospace font-bold text-lg bg-gradient-to-r from-blue to-purple">
                 P{id}
             </div>
-            <table className="rounded-table">
-                <thead className="bg-light-grey">
+            <table className="rounded-table text-lg font-monospace">
+                <thead className="font-bold ">
                     <tr>
                         <th>State</th>
                         {/* <th>Register</th> */}

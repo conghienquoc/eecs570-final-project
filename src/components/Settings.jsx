@@ -59,15 +59,15 @@ const helpBody = {
 
 const styles = {
     tab: [
-        'text-medium-grey', 'hover:text-offblack',
+        'text-medium-grey', 'hover:text-white',
         'rounded-tl-lg', 'rounded-tr-lg',
-        'border-b-2', 'border-light-grey',
-        'py-1', 'px-4',
+        'border-b-[1.5px]', 'border-medium-grey',
+        'py-1', 'px-4', 
         ' ',
     ].join(' '),
     tab_active: [
-        'text-offblack', 'border-t-2','border-l-2', 'border-r-2', 'border-b-0',
-        'font-bold',
+        '!text-white', 'border-t-[1.5px]','border-l-[1.5px]', 'border-r-[1.5px]', '!border-b-0',
+        'font-semibold',
     ].join(' '),
 };
 
@@ -143,14 +143,14 @@ const Settings = ({setProcessors, setMemory, setCurrentType, setRunning, disable
                         </button>
                     )
                 })}
-                <div className="flex-1 border-b-2 border-light-grey"/>
+                <div className="flex-1 border-b-[1.5px] border-medium-grey"/>
             </div>
             <div className="min-h-[250px]">
                 <p>{helpBody[activeTab]}</p>                
             </div>            
             
             <div className='flex flex-row mt-10 gap-x-3 justify-end	'>
-                <button onClick={toggleSettingsModal} className={const_styles.modal_button + ' bg-offwhite text-medium-grey hover:bg-light-grey hover:text-offblack active:bg-offwhite active:text-medium-grey'}>Close</button>
+                <button onClick={toggleSettingsModal} className={const_styles.modal_button + ' bg-[#312e5c] text-medium-grey hover:bg-[#3f3b76]'}>Close</button>
             </div>
         </div>;
 
@@ -168,12 +168,12 @@ const Settings = ({setProcessors, setMemory, setCurrentType, setRunning, disable
         <div className="flex flex-col gap-y-2">
             <Modal showModal={showSettingsModal} toggleModal={toggleSettingsModal} content={settingsModalContent} size={'lg'}/>
 
-            <div className="flex flex-row gap-x-4">
+            <div className="flex flex-row gap-x-4 mb-2">
                 <h2 className="text-2xl font-bold font-mono">Settings</h2>
                 <HelpButton toggleModal={toggleSettingsModal}/>
             </div>            
 
-            <div className="flex flex-col gap-y-2 items-stretch">
+            <div className="flex flex-col gap-y-2 items-stretch mb-2">
                 <Switch
                     options={Object.values(protocols)}
                     active={protocol}
@@ -185,16 +185,20 @@ const Settings = ({setProcessors, setMemory, setCurrentType, setRunning, disable
                     toggleFunc={setType}
                 />
             </div>
-            <button className="rounded-lg bg-green p-2 text-white disabled:bg-light-grey disabled:text-medium-grey"
-                disabled={disableGetInitialState}
-                onClick={() => getInitialState()}
-            >
-                Get initial state
-            </button>
-            <button className='bg-blue text-white p-2 rounded-lg'
-                onClick={() => reset()}>
-                Reset
-            </button>
+            <div className="flex flew-row gap-x-3 justify-end">
+                <button className={`rounded-full bg-gradient-to-l from-blue to-mint text-white font-medium
+                 disabled:bg-none px-4 py-2 hover:from-[#3063c8] hover:to-[#13d28f]
+                 drop-shadow-lg ` + const_styles.disabled_button}
+                    disabled={disableGetInitialState}
+                    onClick={() => getInitialState()}
+                >
+                    Get initial state
+                </button>
+                <button className={`bg-blue text-white font-medium px-4 py-2 rounded-full hover:bg-[#3063c8] drop-shadow-lg ` + const_styles.disabled_button}
+                    onClick={() => reset()}>
+                    Reset
+                </button>
+            </div>            
         </div>
     )
 }
