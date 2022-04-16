@@ -74,6 +74,25 @@ class API {
         return response.data;
     }
 
+    async executeQueueEvent(paramObj) {
+        console.log('execute_queue_event');
+        console.log(paramObj);
+        const response = await http({
+            method: 'POST',
+            url: "execute_queue_event",
+            data: paramObj,
+        })
+        console.log(response.data)  
+        return response.data;
+    }
+
+    async getQueueEvents() {
+        console.log('get_queue_events');
+        const response = await http.get('/get_queue_events');
+        console.log(response.data);
+        return response.data;
+    }
+
     // async test(paramObj) {
     //     const response = await http.post('/get_next_step', {
     //         data: paramObj,

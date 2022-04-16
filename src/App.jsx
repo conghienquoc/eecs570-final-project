@@ -57,6 +57,7 @@ function App() {
         new_value: null,
   });
   const [bus_instructions, setBusInstructions] = useState([]);
+  const [queue_instructions, setQueue] = useState([[], [], [], []]);  // [proc1, proc2, proc3, memory]
   const [lines, setLines] = useState([]); // Keep track of all lines created to remove at the end
   const [tooltip_buttons, setTooltipButtons] = useState([[], [], [], [], []]);   // Arr of 5 elts [p0, p1, p2, mem, bus]
   const [currentType, setCurrentType] = useState(types.unspecified);   // Keep track of current type to know to disable correct buttons
@@ -86,6 +87,10 @@ function App() {
     setBusInstructions([]);
   }
 
+  const clearQueueInstructions = () => {
+    setQueue([[], [], [], []]);;
+  }
+
 const executeProcessorAction = (proc_num, action, value=null) => {
     // Make sure to save changes before sending request
     clearAndCommit();
@@ -99,8 +104,9 @@ const executeProcessorAction = (proc_num, action, value=null) => {
     API.executeProcessorAction(body).then( res=> {
       setCurrentSteps(res);
 
-      // Update bus as well
+      // Update bus and queue as well
       API.getBusEvents().then( busEvents => {setBusInstructions(busEvents)});
+      API.getQueueEvents().then( queueEvents => {setQueue(queueEvents)});
       enableValidInstructions();
     })
   }
@@ -114,6 +120,7 @@ const executeProcessorAction = (proc_num, action, value=null) => {
     commitMemory();
     commitProcs();
     clearBusInstructions();
+    clearQueueInstructions();
   }
 
   const commitProcs = () => {
@@ -144,8 +151,24 @@ const executeProcessorAction = (proc_num, action, value=null) => {
     API.executeBusEvent({'busIndex': busIndex}).then( res=> {
       setCurrentSteps(res);
 
-      console.log('Get bus event');
+      // Update bus and queue as well
       API.getBusEvents().then( busEvents => {setBusInstructions(busEvents)});
+      API.getQueueEvents().then( queueEvents => {setQueue(queueEvents)});
+      enableValidInstructions();
+    });    
+  }
+
+  const executeQueueEvent = (index) => {
+    // Make sure to save changes before sending request
+    clearAndCommit();
+
+    console.log(`Execute queue event at index ${index}`);
+    API.executeQueueEvent({'processor': index}).then( res=> {
+      setCurrentSteps(res);
+
+      // Update bus and queue as well
+      API.getBusEvents().then( busEvents => {setBusInstructions(busEvents)});
+      API.getQueueEvents().then( queueEvents => {setQueue(queueEvents)});
       enableValidInstructions();
     });    
   }
@@ -218,12 +241,14 @@ const executeProcessorAction = (proc_num, action, value=null) => {
               setProcessors={setProcessors}
               setMemory={setMemory}
               bus_instructions={bus_instructions}
-              setBusInstructions={setBusInstructions}
+              queue_instructions={queue_instructions}
               lines={lines}
               tooltip_buttons={tooltip_buttons}
               setTooltipButtons={setTooltipButtons}
               disableBusButtons={currentType !== types.split}   // Only allow bus buttons to be clicked in split transaction mode
               getNextStep={getNextStep}
+              executeQueueEvent={executeQueueEvent}
+              currentType={currentType}
             />
           </div>          
 

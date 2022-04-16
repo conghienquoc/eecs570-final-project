@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useAlert } from 'react-alert'
 import Processor from "./Processor";
 import Bus from "./Bus";
 import MainMemory from "./MainMemory";
@@ -7,6 +6,7 @@ import LeaderLine from "react-leader-line";
 import API from "../services/api";
 import CoherencyState from "../utils/coherency-states";
 import const_styles from "../constants/const_styles";
+import Modal from "./Modal";
 
 const styles = {
 };
@@ -23,6 +23,7 @@ const actions = {
     update: "Update",
     data: "Data",
     hit: "Hit",
+    stall: "Stall",
 }
 
 const num_to_id = {
@@ -53,16 +54,17 @@ const colors = [
 const Simulation = (
     {
         processors, memory, bus_instructions, current_steps,
-        setProcessors, setBusInstructions, setMemory,
+        queue_instructions,
+        setProcessors, setMemory,
         lines, tooltip_buttons, setTooltipButtons,
-        disableBusButtons, getNextStep
+        disableBusButtons, getNextStep,
+        executeQueueEvent, currentType
     }
 ) => {
     
     // var lines = []
     let existing_edges = [] // Keep track of pairs of endpoints to handle overlapping
     // const [existing_edges, setExistingEdges] = useState([]);
-    const alert = useAlert();
 
     const showLine = (line) => {
         if (line === null) return;
@@ -212,20 +214,59 @@ const Simulation = (
     }
 
 
+    const create_queue = (i) => {
+        if (currentType !== "Split Transaction") return null;
+        
+        let buttons = null;
+        let instructions = queue_instructions[num_to_index[i.toString()]];
+
+        if (instructions.length > 0) {
+            buttons = instructions.map((instruction, i) =>
+                <button className={"flex-1 !py-1 " + const_styles.proc_button + " " + const_styles.disabled_button}
+                    disabled={i !== 0}
+                    onClick={() => executeQueueEvent(i)}>
+                    {`${instruction['action']}`}
+                </button>
+            );            
+        }
+
+        let queue_events =
+        <div className="flex flex-row mt-5 gap-x-4 items-baseline">
+            <div className="flex-0">
+                Queue:
+            </div>
+            <div className="flex flex-col flex-1 gap-y-2">
+                {buttons}
+            </div>
+            
+        </div>;
+        
+
+        return queue_events;
+    }
     
 
     // Divs for all the subparts so we can have dynamic buttons for the lines
 
-    const processor_divs = processors.map((p, i) => 
-        <div key={'P' + (i+1)} id={'P' + (i+1) + '-wrapper'} className="relative">
-            <Processor id={i+1} cache={p}/>
+    const processor_divs = processors.map((p, i) => {
+        
 
-            <div className="absolute flex flex-col top-0 right-[-3rem] gap-1">
-                {create_step_buttons(i)}
-            </div>            
-        </div>
+        return (
+            <div key={'P' + (i+1)} id={'P' + (i+1) + '-wrapper'} className="relative">
+                <Processor id={i+1} cache={p}/>
+
+                <div className="absolute flex flex-col top-0 right-[-3rem] gap-1">
+                    {create_step_buttons(i)}
+                </div>
+                {create_queue(i)}
+            </div>
+        );        
+    }
+        
     )
 
+
+    // Memory div
     const memory_div = (
         <div className="relative">
             <MainMemory cache={memory} />
@@ -233,9 +274,13 @@ const Simulation = (
             <div className="absolute flex flex-col top-0 left-[-2.5rem] gap-1">
                 {/* 3 is index of main memory in tooltip buttons */}
                 {create_step_buttons(3)}
-            </div>  
+            </div>
+
+            {create_queue(-1)}
         </div>
     )
+
+    // Endof Memory div
 
     const bus_div = (
         <div className="relative self-stretch">
@@ -256,6 +301,33 @@ const Simulation = (
             {instruction.action} from {num_to_id[instruction.src.toString()]}
         </button>
     )
+
+    // Modal
+    const [showSimModal, setShowSimModal] = useState(false);
+    const [modalTitle, setModalTitle] = useState("");
+    const [modalText, setModalText] = useState("");
+
+    const toggleModal = () => {
+        setShowSimModal(!showSimModal);
+    }
+
+    const modalBody = 
+        <div>
+            <div className="flex flex-row gap-x-4 items-center">
+                {modalText}
+            </div>            
+            
+            <div className='flex flex-row mt-10 gap-x-3 justify-end	'>
+                <button onClick={toggleModal} className={const_styles.modal_button + ' bg-[#312e5c] text-medium-grey hover:bg-[#3f3b76]'}>Close</button>
+            </div>
+        </div>;
+
+    const modalContent = {
+        title: modalTitle,
+        body: modalBody,
+    };
+
+    // Endof Modal
     
     // Add tooltip for each step and update bus instructions
     useEffect(() => {
@@ -273,7 +345,16 @@ const Simulation = (
                 dst = src;
             }
             else if (step['action'] === actions.hit) {
-                alert.show(`Cache hit on processor ${step['target'] + 1}!`);
+                setModalTitle('Cache hit!');
+                setModalText(`Cache hit on processor ${step['target'] + 1}.`);
+                toggleModal();
+                return;
+            }
+            else if (step['action'] === actions.stall) {
+                setModalTitle('Stalling...');
+                if (step['target'] !== -1) setModalText(`Stalling on processor ${step['target'] + 1}.`);
+                else setModalText(`Stalling on memory.`);                
+                toggleModal();
                 return;
             }
             else {
@@ -308,6 +389,8 @@ const Simulation = (
 
     return (
         <div>
+            <Modal showModal={showSimModal} toggleModal={toggleModal} content={modalContent}/>
+
             <div className="flex flex-row gap-x-28 items-center justify-between">
                 <span className="bg-[#00c75f] bg-[#8980F5] bg-[#F25757] bg-[#0892A5] bg-[#55286F]
                                 text-[#00c75f] text-[#8980F5] text-[#F25757] text-[#0892A5] text-[#55286F] hidden"></span>
