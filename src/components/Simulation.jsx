@@ -221,9 +221,9 @@ const Simulation = (
         let instructions = queue_instructions[num_to_index[i.toString()]];
 
         if (instructions.length > 0) {
-            buttons = instructions.map((instruction) =>
+            buttons = instructions.map((instruction, instructionIdx) =>
                 <button className={"flex-1 !py-1 " + const_styles.proc_button + " " + const_styles.disabled_button}
-                    disabled={i !== 0}
+                    disabled={instructionIdx !== 0}
                     onClick={() => executeQueueEvent(i)}>
                     {`${instruction['action']}`}
                 </button>
