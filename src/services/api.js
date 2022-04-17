@@ -53,6 +53,7 @@ class API {
 
     
     async getBusEvents() {
+        console.log('get_bus_events');
         const response = await http.get('/get_bus_events');
         console.log(response.data);
         return response.data;

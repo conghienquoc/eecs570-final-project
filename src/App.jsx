@@ -59,7 +59,7 @@ function App() {
   const [bus_instructions, setBusInstructions] = useState([]);
   const [queue_instructions, setQueue] = useState([[], [], [], []]);  // [proc1, proc2, proc3, memory]
   const [lines, setLines] = useState([]); // Keep track of all lines created to remove at the end
-  const [tooltip_buttons, setTooltipButtons] = useState([[], [], [], [], []]);   // Arr of 5 elts [p0, p1, p2, mem, bus]
+  const [tooltip_buttons, setTooltipButtons] = useState([[], [], [], [], [], [], []]);   // Arr of 5 elts [p0, p1, p2, mem, bus, requestBus, responseBus]
   const [currentType, setCurrentType] = useState(types.unspecified);   // Keep track of current type to know to disable correct buttons
   const [isRunning, setRunning] = useState(false);
   const [disableProcAction, setDisableProcAction] = useState(
@@ -80,7 +80,7 @@ function App() {
 }
 
   const clearTooltips = () => {
-    setTooltipButtons([[], [], [], [], []])
+    setTooltipButtons([[], [], [], [], [], [], []])
   }
 
   const clearBusInstructions = () => {

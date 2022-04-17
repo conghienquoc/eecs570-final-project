@@ -32,6 +32,8 @@ const num_to_id = {
     "2": "P3",
     "-1": "Memory",
     "-2": "Bus",
+    "-3": "RequestBus",
+    "-4": "ResponseBus"
 }
 
 const num_to_index = {
@@ -40,6 +42,14 @@ const num_to_index = {
     "2": 2,
     "-1": 3,
     "-2": 4,
+    "-3": 5,
+    "-4": 6,
+}
+
+const bus_type = {
+    regular: 'Bus',
+    request: 'RequestBus',
+    response: 'ResponseBus',
 }
 
 const colors = [
@@ -271,7 +281,7 @@ const Simulation = (
         <div className="relative">
             <MainMemory cache={memory} />
 
-            <div className="absolute flex flex-col top-0 left-[-2.5rem] gap-1">
+            <div className="absolute flex flex-col top-0 left-[-3rem] gap-1">
                 {/* 3 is index of main memory in tooltip buttons */}
                 {create_step_buttons(3)}
             </div>
@@ -282,25 +292,94 @@ const Simulation = (
 
     // Endof Memory div
 
-    const bus_div = (
-        <div className="relative self-stretch">
-            <Bus/>
 
-            <div className="absolute flex flex-col top-0 right-[-2.5rem] gap-1">
-                {/* 4 is index of main memory in tooltip buttons */}
+    // Regular bus
+    const reg_bus_div = (
+        <div className="relative self-stretch">
+            <Bus type={bus_type.regular}/>
+
+            <div className="absolute flex flex-col top-0 right-[-3rem] gap-1">
+                {/* 4 is index of bus in tooltip buttons */}
                 {create_step_buttons(4)}
             </div>  
         </div>
     )
 
     // Only allow bus buttons to be clicked in split transaction mode
-    const bus_instruction_buttons = bus_instructions.map((instruction, i) => 
-        <button className={const_styles.proc_button + " " + const_styles.disabled_button} disabled={disableBusButtons}
-            onClick={() => getNextStep(i)}
-        >
-            {instruction.action} from {num_to_id[instruction.src.toString()]}
-        </button>
+    const get_bus_instruction_buttons = (instructions) => {
+        return instructions.map((instruction, i) => {
+            let busIdx = i
+            if (currentType === "Split Transaction") {
+                console.log('split bus instruction');
+                console.log(instruction);
+                busIdx = instruction[1];
+                instruction = instruction[0];
+            }
+
+            return (
+                <button className={const_styles.proc_button + " " + const_styles.disabled_button} disabled={disableBusButtons}
+                    onClick={() => getNextStep(busIdx)}
+                >
+                    {instruction.action} from {num_to_id[instruction.src.toString()]}
+                </button>
+            )
+        }            
+        );
+    }
+
+    const reg_bus_instruction_buttons = (
+        <div className="mt-10 flex flex-col justify-center items-center gap-y-2 ml-20">
+            <h2 className="text-lg text-primary-light">Waiting Bus Instructions</h2>
+            {currentType !== "Split Transaction" ? get_bus_instruction_buttons(bus_instructions) : null}
+        </div>
     )
+
+    // Endof regular bus
+
+
+    // Split bus
+    const [resBusInstructions, setResBusInstructions] = useState([]);
+    const [reqBusInstructions, setReqBusInstructions] = useState([]);    
+
+    const split_bus_div = (
+        <div className="flex flex-row gap-x-4 self-stretch">
+            <div className="relative">
+                <Bus type={bus_type.request}/>
+
+                <div className="absolute flex flex-col top-0 right-[-3rem] gap-1">
+                    {/* 5 is index of request bus in tooltip buttons */}
+                    {create_step_buttons(5)}
+                </div>  
+            </div>
+
+            <div className="relative">
+                <Bus type={bus_type.response}/>
+
+                <div className="absolute flex flex-col top-0 left-[-3rem] gap-1">
+                    {/* 6 is index of response bus in tooltip buttons */}
+                    {create_step_buttons(6)}
+                </div>  
+            </div>
+
+        </div>
+    )
+
+    const split_bus_instruction_buttons = (
+        <div className="mt-10 flex flex-row justify-center items-baseline gap-x-8 ml-28">
+            <div className="flex flex-col justify-center gap-y-2">
+                <h2 className="text-lg text-primary-light">Waiting on Request Bus</h2>
+                {currentType === "Split Transaction" ? get_bus_instruction_buttons(reqBusInstructions) : null}
+            </div>
+
+            <div className="flex flex-col justify-center gap-y-2">
+                <h2 className="text-lg text-primary-light">Waiting on Response Bus</h2>
+                {currentType === "Split Transaction" ? get_bus_instruction_buttons(resBusInstructions) : null}
+            </div>
+
+        </div>
+    )
+
+    // Endof Split bus
 
     // Modal
     const [showSimModal, setShowSimModal] = useState(false);
@@ -372,13 +451,6 @@ const Simulation = (
                 'state': step['state'],
             }
 
-            // Add action to be processed in bus
-            // if (dst === -2) {
-            //     let new_bus_instructions = bus_instructions.slice(0);
-            //     new_bus_instructions.push(action);
-            //     setBusInstructions(new_bus_instructions);
-            // }
-
             // Add tooltip buttons
             let new_tooltip_buttons = tooltip_buttons.slice(0);
             new_tooltip_buttons[num_to_index[src.toString()]].push(action);
@@ -386,6 +458,30 @@ const Simulation = (
 
         });
     }, [current_steps])
+
+    useEffect(() => {
+        if (currentType === "Split Transaction") {
+            console.log('bus ins');
+            console.log(bus_instructions);
+
+            bus_instructions.forEach((instruction, i) => {
+                if (instruction['dst'] === -3) {
+                    temp_req.push([instruction, i]);
+                }
+                else if (instruction['dst'] === -4) {
+                    temp_res.push([instruction, i]);
+                }
+            })
+
+            setReqBusInstructions(temp_req);
+            setResBusInstructions(temp_res);
+    
+            console.log("req bus");
+            console.log(reqBusInstructions);
+            console.log("res bus");
+            console.log(resBusInstructions);
+        }
+    }, [bus_instructions])
 
     return (
         <div>
@@ -399,15 +495,12 @@ const Simulation = (
 
                 </div>
 
-                {bus_div}
+                {currentType === "Split Transaction" ? split_bus_div : reg_bus_div}
                 
                 {memory_div}          
             </div>
 
-            <div className="mt-10 flex flex-col justify-center items-center gap-y-2 ml-20">
-                <h2 className="text-lg text-primary-light">Waiting Bus Instructions</h2>
-                {bus_instruction_buttons}
-            </div>
+            {currentType === "Split Transaction" ? split_bus_instruction_buttons : reg_bus_instruction_buttons}        
             
         </div>
         
