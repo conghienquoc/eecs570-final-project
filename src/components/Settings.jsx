@@ -53,8 +53,30 @@ const helpBody = {
             <strong>MOSI</strong> introduces the Owned state in which one processor has ownership of a block and others are shared. The values in the processors may be dirty.
             The Owned state is reached after a processor reads while another is Modified. The main benefit is that the writeback to memory is deferred until the owner is evicted.
         </p>
-    </div>
-    
+    </div>,
+    moesi:
+    <div>
+        <p>
+            <strong>MOESI</strong> is a full cache coherency protocol that includes all of the possible states commonly used in other protocols.
+            In addition to the four common MESI protocol states, there is a fifth Owned state representing data that is both modified and shared.
+            This avoids the need to write modified data back to main memory before sharing it. The write-back may be deferred. 
+        </p>
+    </div>,
+    atomic:
+    <div>
+        <p>
+        This option assumes an atomic bus with atomic requests and atomic transactions.
+        Atomic requests ensure that a processor can send out a request on the bus without worrying that another processor's request will be ordered ahead of its own.
+        Atomic transactions ensure that no further requests can be issued on the bus until after the current transaction is completed.
+        </p>
+    </div>,
+    split:
+    <div>
+        <p>
+        This option assumes a non-atomic bus where requests and responses can be interleaved from different processors.
+        Order of responses do not necessarily match with the order of the requests.
+        </p>
+    </div>    
 }
 
 const styles = {
