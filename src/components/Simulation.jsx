@@ -463,8 +463,12 @@ const Simulation = (
         if (currentType === "Split Transaction") {
             console.log('bus ins');
             console.log(bus_instructions);
+            let temp_res = [];
+            let temp_req = [];
 
             bus_instructions.forEach((instruction, i) => {
+                console.log('test');
+                console.log(instruction)
                 if (instruction['dst'] === -3) {
                     temp_req.push([instruction, i]);
                 }
